@@ -19,10 +19,29 @@ interface HeroProps {
 export default function Hero({ personalInfo, socialLinks, stats }: HeroProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [time, setTime] = useState(0);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const aboutRef = useRef<HTMLDivElement>(null);
   const [aboutVisible, setAboutVisible] = useState(false);
 
   useEffect(() => {
+    // Set initial window size
+    if (typeof window !== 'undefined') {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      
+      const handleResize = () => {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      };
+      window.addEventListener('resize', handleResize);
+      
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -44,7 +63,9 @@ export default function Hero({ personalInfo, socialLinks, stats }: HeroProps) {
     if (aboutRef.current) aboutObserver.observe(aboutRef.current);
     
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
       clearInterval(interval);
       if (aboutRef.current) aboutObserver.unobserve(aboutRef.current);
     };
@@ -75,7 +96,7 @@ export default function Hero({ personalInfo, socialLinks, stats }: HeroProps) {
         <div 
           className="absolute top-20 left-10 w-96 h-96 bg-emerald-300/25 rounded-full blur-3xl animate-float transition-transform duration-700"
           style={{ 
-            transform: `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${(mousePosition.y - window.innerHeight / 2) * 0.03}px)`,
+            transform: `translate(${(mousePosition.x - (windowSize.width || 1920) / 2) * 0.03}px, ${(mousePosition.y - (windowSize.height || 1080) / 2) * 0.03}px)`,
             animationDelay: '1s',
             background: `radial-gradient(circle, hsl(${(time * 8 + 140) % 360}, 70%, 80%) 0%, transparent 70%)`
           }}
@@ -84,7 +105,7 @@ export default function Hero({ personalInfo, socialLinks, stats }: HeroProps) {
           className="absolute top-40 right-10 w-96 h-96 bg-sky-300/25 rounded-full blur-3xl animate-float transition-transform duration-700" 
           style={{ 
             animationDelay: '2s',
-            transform: `translate(${(mousePosition.x - window.innerWidth / 2) * -0.03}px, ${(mousePosition.y - window.innerHeight / 2) * 0.03}px)`,
+            transform: `translate(${(mousePosition.x - (windowSize.width || 1920) / 2) * -0.03}px, ${(mousePosition.y - (windowSize.height || 1080) / 2) * 0.03}px)`,
             background: `radial-gradient(circle, hsl(${(time * 8 + 180) % 360}, 70%, 80%) 0%, transparent 70%)`
           }}
         ></div>

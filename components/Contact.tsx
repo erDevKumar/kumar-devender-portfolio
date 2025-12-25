@@ -16,7 +16,7 @@ export default function Contact({ personalInfo, socialLinks }: ContactProps) {
         </h2>
         <div className="bg-white rounded-lg shadow-lg p-8 md:p-12">
           <p className="text-lg text-gray-700 mb-8 text-center">
-            I'm always open to discussing new opportunities, interesting projects, or just
+            I&apos;m always open to discussing new opportunities, interesting projects, or just
             having a chat. Feel free to reach out!
           </p>
           <div className="space-y-6 mb-8">
