@@ -3,6 +3,7 @@
 import { WorkExperience } from '@/types/portfolio';
 import { Calendar, MapPin, Briefcase, ExternalLink } from 'lucide-react';
 import Collapsible from '../common/Collapsible';
+import CompanyLogo from '../common/CompanyLogo';
 import { useExpandable } from '@/hooks/useExpandable';
 
 interface ExperienceItemProps {
@@ -20,13 +21,12 @@ export default function ExperienceItem({ exp, index }: ExperienceItemProps) {
       className="hover:-translate-y-2 hover:scale-[1.02] cursor-pointer"
       header={
         <div className="flex items-start gap-3 flex-1">
-          <div className="w-12 h-12 rounded-2xl overflow-hidden bg-white/90 border-2 border-emerald-200/70 flex items-center justify-center">
-            {exp.companyInfo?.logo ? (
-              <img src={exp.companyInfo.logo} alt={`${exp.company} logo`} className="w-full h-full object-contain p-1" />
-            ) : (
-              <div className="text-emerald-600/80 font-bold">{exp.company.charAt(0)}</div>
-            )}
-          </div>
+          <CompanyLogo
+            logo={exp.companyInfo?.logo}
+            companyName={exp.company}
+            size="md"
+            className="flex-shrink-0"
+          />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-1">
               <Briefcase className="h-3.5 w-3.5 text-emerald-600/70" />
