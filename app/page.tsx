@@ -1,39 +1,22 @@
-import Navigation from '@/components/Navigation';
-import Hero from '@/components/Hero';
-import ExperienceAndProjects from '@/components/ExperienceAndProjects';
-import EducationAndSkills from '@/components/EducationAndSkills';
+import Navigation from '@/components/layout/Navigation';
+import Footer from '@/components/layout/Footer';
+import Hero from '@/components/sections/Hero';
+import Experience from '@/components/sections/Experience';
+import Projects from '@/components/sections/Projects';
+import Education from '@/components/sections/Education';
+import Skills from '@/components/sections/Skills';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
       <Navigation />
-      <Hero
-        personalInfo={portfolioData.personalInfo}
-        socialLinks={portfolioData.socialLinks}
-        stats={{
-          experience: portfolioData.experience.length,
-          projects: portfolioData.projects.length,
-          skills: portfolioData.skills.length,
-        }}
-      />
-      <ExperienceAndProjects 
-        experience={portfolioData.experience} 
-        projects={portfolioData.projects}
-      />
-      <EducationAndSkills 
-        education={portfolioData.education} 
-        skills={portfolioData.skills}
-      />
-      <footer className="bg-gray-900/90 backdrop-blur-sm text-white py-6">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400">
-            © {new Date().getFullYear()} {portfolioData.personalInfo.name}. All rights
-            reserved.
-          </p>
-        </div>
-      </footer>
+      <Hero personalInfo={portfolioData.personalInfo} socialLinks={portfolioData.socialLinks} />
+      <Experience experience={portfolioData.experience} />
+      <Projects projects={portfolioData.projects} />
+      <Education education={portfolioData.education} />
+      <Skills skills={portfolioData.skills} />
+      <Footer />
     </main>
   );
 }
-
