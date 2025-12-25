@@ -1,0 +1,225 @@
+import { PortfolioData } from '@/types/portfolio';
+
+export const portfolioData: PortfolioData = {
+  personalInfo: {
+    name: 'Devender Kumar',
+    title: 'Driving Scalable & Engaging User Experiences at LOCO • 10+ Years in Mobile App Development',
+    location: 'India',
+    bio: 'Expertise in Android Development and technologies, with 10+ Years of experience with different product organisations targeting C2C, B2B and B2C. Have built/contributed apps with huge user base like Delivery Partner App at Zomato, Scooter Companion app at OlaElectric. Well-Equipped with tactics towards delivering a high quality mobile application having a huge user base and complex functionalities. Very familiar with latest updates around the technologies related to Android Development.',
+    email: 'erkumardevender@gmail.com',
+    phone: '+91-8901111320',
+    profileImage: 'https://media.licdn.com/dms/image/v2/D4E03AQHAOm5P3qDCZg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1635158924477?e=1768435200&v=beta&t=xXstMwHFJ5-26YmKjT3416E-n2s4C-5C137obfBKGcs',
+  },
+  experience: [
+    {
+      company: 'LOCO',
+      role: 'SDE-3',
+      duration: 'Feb. 2025 - Present',
+      startDate: '2025-02',
+      current: true,
+      description: [
+        'Contributed towards front user app for viewers audience to watch a live game stream across the platform',
+        'Introduced Jetpack Compose across the app instead of legacy xml views',
+        'Active contributor with hands-on work for big and crucial features like Leaderboards, Quest, Rewards that motivates the viewership audience',
+        'Improved and re-Write the backing up mechanism for analytics events across the app',
+        'Mentoring the team, code reviews and performance, creating the thoughtful designs for android app ecosystem against existing and new features',
+      ],
+      location: 'Bengaluru, India',
+      companyInfo: {
+        industry: 'Live Game Streaming & Esports',
+        founded: '2017',
+        website: 'https://www.loco.gg',
+        description: "LOCO is India's leading live game streaming and esports platform, aiming to democratize gaming entertainment and create new products, features, and experiences. The company provides a platform for every gamer to become a gaming superstar and builds social experiences for the virtual world.",
+        logo: '/logos/loco_logo.jpg',
+      },
+    },
+    {
+      company: 'Ola Electric',
+      role: 'SDE-3',
+      duration: 'Sept. 2022 - Feb. 2025',
+      startDate: '2022-09',
+      endDate: '2025-02',
+      description: [
+        'Contributed majorly towards the user front app (Companion-App)',
+        'Carried out the code reviews and continuous feedback for the same',
+        'App deliveries, publishing and monitoring',
+        'Trained the team with latest updates and changes in android(SDK+IDE) and their adaptation',
+      ],
+      location: 'Bengaluru, Karnataka, India',
+      companyInfo: {
+        industry: 'Electric Vehicle Manufacturing',
+        founded: '2017',
+        website: 'https://www.olaelectric.com',
+        description: 'Ola Electric Mobility Limited is an Indian electric vehicle manufacturer headquartered in Bengaluru. Founded in 2017 by Bhavish Aggarwal, the company designs and manufactures electric two-wheelers, including the Ola S1 in three variants named Ola S1 Air, Ola S1X, and S1 Pro.',
+        logo: '/logos/olaelectric_logo.jpg',
+      },
+    },
+    {
+      company: 'Rivigo',
+      role: 'Lead Software Engineer',
+      duration: 'Jan. 2019 - July. 2022',
+      startDate: '2019-01',
+      endDate: '2022-07',
+      description: [
+        'Managed and developed multiple apps in different business verticals of organisation',
+        'Led the team to develop and migrate from legacy code to newer android technologies',
+      ],
+      location: 'Gurugram, Haryana, India',
+      companyInfo: {
+        industry: 'Logistics & Transportation',
+        founded: '2014',
+        website: 'https://www.rivigo.com',
+        description: 'Rivigo is a technology-enabled logistics company that offers relay trucking services and solutions in India. The company aims to make logistics human, faster, safer, and cost-effective through its innovative relay trucking model and cutting-edge technology.',
+        logo: '/logos/rivigo_logo.jpg',
+      },
+    },
+    {
+      company: 'Zomato',
+      role: 'Software Engineer',
+      duration: 'March, 2018 - Jan, 2019',
+      startDate: '2018-03',
+      endDate: '2019-01',
+      description: [
+        'Developed many features for Delivery Partner App',
+        'Migrated web-embedded Merchant(Restaurant Partner) App to a hybrid app',
+      ],
+      location: 'Gurugram, Haryana, India',
+      companyInfo: {
+        industry: 'Food & Beverage Services, Technology',
+        founded: '2008',
+        website: 'https://www.zomato.com',
+        description: 'Zomato is a global restaurant discovery and food delivery service founded in 2008. It provides information, menus, and user reviews of restaurants, and also offers food delivery options from partner restaurants in select cities.',
+        logo: '/logos/zomato_logo.jpg',
+      },
+    },
+    {
+      company: 'Appster',
+      role: 'Software Engineer',
+      duration: 'March, 2015 - March, 2018',
+      startDate: '2015-03',
+      endDate: '2018-03',
+      description: [
+        'Started Android Development journey from basic to intermediate level',
+        'Developed over 6 Apps with different use-cases targeting audience in US and Australia mainly',
+      ],
+      location: 'Melbourne, Australia',
+      companyInfo: {
+        industry: 'Software Development, Mobile App Development',
+        founded: '2011',
+        website: 'https://www.appster.com.au',
+        description: 'Appster was a mobile app development company that provided services for startups and enterprises to build and scale their mobile applications. The company focused on delivering end-to-end solutions from ideation to development and maintenance.',
+        // logo: '/logos/appster_logo.jpg', // Logo not available - using fallback initial
+      },
+    },
+  ],
+  education: [
+    {
+      institution: 'Maharishi Dayanand University',
+      degree: 'Bachelor of Technology',
+      field: 'Computer Science',
+      duration: '2011 - 2015',
+      startDate: '2011',
+      endDate: '2015',
+      location: 'India',
+    },
+    {
+      institution: 'Koenig Solutions',
+      degree: 'Professional Android Development',
+      duration: '2015',
+      startDate: '2015',
+      endDate: '2015',
+      location: 'New Delhi, India',
+    },
+  ],
+  skills: [
+    // Architecture & Principles
+    { name: 'MVVM + Clean Architecture', category: 'technical', proficiency: 'expert' },
+    { name: 'OOPS/SOLID Principles', category: 'technical', proficiency: 'expert' },
+    // Programming Languages
+    { name: 'Java', category: 'technical', proficiency: 'expert' },
+    { name: 'Kotlin', category: 'technical', proficiency: 'expert' },
+    { name: 'Kotlin Flows', category: 'technical', proficiency: 'advanced' },
+    // Android Technologies
+    { name: 'Jetpack Compose', category: 'technical', proficiency: 'advanced' },
+    { name: 'Coroutines', category: 'technical', proficiency: 'advanced' },
+    { name: 'RoomDB', category: 'technical', proficiency: 'advanced' },
+    { name: 'Hilt (DI)', category: 'technical', proficiency: 'advanced' },
+    { name: 'Retrofit', category: 'technical', proficiency: 'advanced' },
+    { name: 'FCM Push Notifications', category: 'technical', proficiency: 'advanced' },
+    { name: 'RealtimeDB', category: 'technical', proficiency: 'advanced' },
+    // Protocols & Communication
+    { name: 'RTMP', category: 'technical', proficiency: 'advanced' },
+    { name: 'XMPP', category: 'technical', proficiency: 'advanced' },
+    { name: 'MQTT', category: 'technical', proficiency: 'advanced' },
+    { name: 'RTSP', category: 'technical', proficiency: 'advanced' },
+    { name: 'HTTP', category: 'technical', proficiency: 'expert' },
+    { name: 'Openfire', category: 'technical', proficiency: 'advanced' },
+    { name: 'Smack', category: 'technical', proficiency: 'advanced' },
+    // Android Features
+    { name: 'Maps', category: 'technical', proficiency: 'advanced' },
+    { name: 'Camera', category: 'technical', proficiency: 'advanced' },
+    { name: 'Sensors', category: 'technical', proficiency: 'advanced' },
+    { name: 'MediaProjection', category: 'technical', proficiency: 'advanced' },
+    // Tools & Practices
+    { name: 'Git Management', category: 'tool', proficiency: 'expert' },
+    { name: 'AGP', category: 'tool', proficiency: 'advanced' },
+    { name: 'App Build-time Optimisation', category: 'tool', proficiency: 'advanced' },
+    { name: 'App Publishing/Delivery', category: 'tool', proficiency: 'expert' },
+    { name: 'Android App Debugging/Monitoring', category: 'tool', proficiency: 'expert' },
+    { name: 'Memory Leaks/ANRs/Strict Policy', category: 'tool', proficiency: 'advanced' },
+    { name: 'MultiModules App', category: 'technical', proficiency: 'advanced' },
+    { name: 'State Machines', category: 'technical', proficiency: 'advanced' },
+    { name: 'API Contracts Design', category: 'technical', proficiency: 'advanced' },
+    { name: 'CI/CD', category: 'tool', proficiency: 'advanced' },
+    { name: 'Payment Gateways SDKs', category: 'technical', proficiency: 'advanced' },
+    // AI Tools
+    { name: 'FigmaMake', category: 'tool', proficiency: 'intermediate' },
+    { name: 'ChatGPT', category: 'tool', proficiency: 'intermediate' },
+    { name: 'Codex', category: 'tool', proficiency: 'intermediate' },
+    // Soft Skills
+    { name: 'Team Leadership', category: 'soft' },
+    { name: 'Mentoring', category: 'soft' },
+    { name: 'Code Reviews', category: 'soft' },
+    { name: 'Problem Solving', category: 'soft' },
+    { name: 'Agile Methodologies', category: 'soft' },
+  ],
+  projects: [
+    {
+      name: 'Companion App - Ola Electric',
+      description: "Ola's different models electric scooters are managed by this app. Used RoomDB to support multiple scooters in one app with offline mode capability. Implemented Scooter State Transitions using State machines on top of Graph API. Migrated android app from API 31→33→34 and AGP 8 migration. Improved clean architecture and reduced build time.",
+      technologies: ['Kotlin', 'RoomDB', 'State Machines', 'Graph API', 'Clean Architecture', 'AGP 8'],
+    },
+    {
+      name: 'Scan App - Rivigo',
+      description: 'Scan App is used at warehouses to do the sorting/allotting/tracking/loading and unloading of the consignment boxes. It was distributed internally to warehouses.',
+      technologies: ['Android', 'Java/Kotlin', 'Barcode Scanning'],
+    },
+    {
+      name: 'Captain App - Rivigo',
+      description: 'Used for first-mile (Pick-Ups) and last-mile (deliveries) for a logistics consignment fulfilment.',
+      technologies: ['Android', 'Maps', 'Location Services', 'Real-time Tracking'],
+    },
+    {
+      name: 'Pilot App - Rivigo',
+      description: 'Used for middle-mile for a logistics consignment fulfilment. Truck drivers are assigned duty, and their relay delivery is carried out.',
+      technologies: ['Android', 'Route Optimization', 'Duty Management'],
+    },
+    {
+      name: 'Driver App - Zomato',
+      description: 'Fulfils the food order delivery via delivery person. All process from order assignment to final delivery and collecting payment if COD is applied, happens on the app.',
+      technologies: ['Android', 'Payment Integration', 'Real-time Updates', 'Maps'],
+    },
+    {
+      name: 'Merchant App - Zomato',
+      description: 'Restaurants can receive the orders via this app. Also, they can update their menus and prices (menu services). Migrated the whole app from webView embedded app to a hybrid app (React + Android Native).',
+      technologies: ['Android', 'React Native', 'Hybrid App', 'WebView Migration'],
+    },
+  ],
+  socialLinks: [
+    {
+      platform: 'LinkedIn',
+      url: 'https://www.linkedin.com/in/erkumardevender/',
+    },
+  ],
+};
+
