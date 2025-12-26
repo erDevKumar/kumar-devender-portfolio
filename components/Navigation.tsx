@@ -17,35 +17,62 @@ export default function Navigation() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const element = document.querySelector(href);
-    if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (element) {
+      const yOffset = -80; // Account for fixed navigation
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
     setIsMobileMenuOpen(false);
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'glass-card shadow-xl border-b border-emerald-100/50' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
+      isScrolled 
+        ? 'glass-card shadow-soft-lg border-b border-emerald-200/30 backdrop-blur-xl' 
+        : 'bg-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <a href="#home" onClick={(e) => handleNavClick(e, '#home')} className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300">
-              Portfolio
-            </a>
-          <div className="hidden md:flex space-x-10">
+          <a 
+            href="#home" 
+            onClick={(e) => handleNavClick(e, '#home')} 
+            className="text-2xl font-extrabold gradient-text hover:scale-105 transition-all duration-300 tracking-tight focus-visible-ring"
+          >
+            Portfolio
+          </a>
+          <div className="hidden md:flex items-center space-x-1">
             {NAV_ITEMS.map((item) => (
-              <a key={item.name} href={item.href} onClick={(e) => handleNavClick(e, item.href)} className="text-gray-700 hover:text-emerald-600 transition-all duration-300 font-semibold relative group">
-                {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+              <a 
+                key={item.name} 
+                href={item.href} 
+                onClick={(e) => handleNavClick(e, item.href)} 
+                className="relative px-4 py-2 text-gray-700 hover:text-emerald-600 transition-all duration-300 font-semibold text-sm rounded-xl group focus-visible-ring"
+              >
+                <span className="relative z-10">{item.name}</span>
+                <span className="absolute inset-0 bg-emerald-50/50 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300 group-hover:w-3/4"></span>
               </a>
             ))}
           </div>
-          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden text-gray-700 hover:text-emerald-600 transition-colors p-2 rounded-lg hover:bg-emerald-50" aria-label="Toggle menu">
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+            className="md:hidden text-gray-700 hover:text-emerald-600 transition-all duration-300 p-2.5 rounded-xl hover:bg-emerald-50/80 active:scale-95 focus-visible-ring" 
+            aria-label="Toggle menu"
+          >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+          </button>
         </div>
       </div>
       {isMobileMenuOpen && (
-        <div className="md:hidden glass-card border-t border-emerald-100/50">
-          <div className="px-4 pt-4 pb-6 space-y-2">
+        <div className="md:hidden glass-card border-t border-emerald-200/30 backdrop-blur-xl animate-slide-up">
+          <div className="px-4 pt-2 pb-6 space-y-1">
             {NAV_ITEMS.map((item) => (
-              <a key={item.name} href={item.href} onClick={(e) => handleNavClick(e, item.href)} className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all duration-300 font-medium">
+              <a 
+                key={item.name} 
+                href={item.href} 
+                onClick={(e) => handleNavClick(e, item.href)} 
+                className="block px-4 py-3 text-gray-700 hover:bg-emerald-50/80 hover:text-emerald-600 rounded-xl transition-all duration-300 font-semibold text-sm active:scale-95 focus-visible-ring"
+              >
                 {item.name}
               </a>
             ))}

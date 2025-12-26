@@ -1,40 +1,40 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
-interface ErrorProps {
+export default function Error({
+  error,
+  reset,
+}: {
   error: Error & { digest?: string };
   reset: () => void;
-}
-
-export default function Error({ error, reset }: ErrorProps) {
+}) {
   useEffect(() => {
     console.error('Application error:', error);
   }, [error]);
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #fef2f2, #fce7f3, #fdf2f8)' }}>
-      <div style={{ textAlign: 'center', maxWidth: '28rem', margin: '0 auto', padding: '1rem' }}>
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>Something went wrong!</h1>
-          <p style={{ color: '#4b5563', marginBottom: '1.5rem' }}>
-            {error?.message || 'An unexpected error occurred. Please try again.'}
-          </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
+      <div className="text-center max-w-md mx-auto px-4">
+        <div className="glass-card rounded-3xl p-8 md:p-12 shadow-soft-lg border border-emerald-200/40">
+          <div className="mb-6">
+            <div className="bg-gradient-to-br from-red-500 via-pink-500 to-rose-500 p-4 rounded-3xl shadow-2xl inline-block mb-6">
+              <svg className="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 gradient-text">Something went wrong!</h1>
+            <p className="text-gray-600 text-lg mb-6">
+              {error?.message || 'An unexpected error occurred. Please try again.'}
+            </p>
+          </div>
+          <button
+            onClick={reset}
+            className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105 shadow-soft"
+          >
+            Try again
+          </button>
         </div>
-        <button
-          onClick={reset}
-          style={{
-            background: 'linear-gradient(to right, #10b981, #14b8a6)',
-            color: 'white',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '0.75rem',
-            fontWeight: '600',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          Try again
-        </button>
       </div>
     </div>
   );

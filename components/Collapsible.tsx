@@ -13,19 +13,19 @@ interface CollapsibleProps {
 
 export default function Collapsible({ isExpanded, onToggle, header, children, className = '' }: CollapsibleProps) {
   return (
-    <div className={`glass-card rounded-3xl p-6 hover:shadow-2xl transition-all duration-500 border border-emerald-200/50 shadow-xl ${className}`}>
-      <button onClick={onToggle} className="w-full flex items-center justify-between mb-4 group">
+    <div className={`glass-card rounded-3xl p-6 md:p-8 hover:shadow-soft-lg transition-all duration-500 border border-emerald-200/40 shadow-soft-lg card-hover ${className}`}>
+      <button onClick={onToggle} className="w-full flex items-center justify-between mb-4 group focus-visible-ring">
         {header}
-        <div className="flex items-center gap-2 text-emerald-600/80 hover:text-emerald-700 group-hover:scale-110 transition-all duration-300">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50/50 text-emerald-600/80 hover:text-emerald-700 group-hover:bg-emerald-100/50 group-hover:scale-105 transition-all duration-300">
           {isExpanded ? (
             <>
               <ChevronUp className="h-5 w-5" />
-              <span className="text-sm font-semibold">Less</span>
+              <span className="text-sm font-semibold hidden sm:inline">Less</span>
             </>
           ) : (
             <>
               <ChevronDown className="h-5 w-5" />
-              <span className="text-sm font-semibold">More</span>
+              <span className="text-sm font-semibold hidden sm:inline">More</span>
             </>
           )}
         </div>
