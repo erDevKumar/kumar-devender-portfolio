@@ -3,7 +3,6 @@ export const NAV_ITEMS = [
   { name: 'Experience', href: '#experience' },
   { name: 'Education', href: '#education' },
   { name: 'Skills', href: '#skills' },
-  { name: 'Projects', href: '#projects' },
 ];
 
 export const CATEGORY_LABELS: Record<string, string> = {
