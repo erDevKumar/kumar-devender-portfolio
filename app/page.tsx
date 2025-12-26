@@ -11,15 +11,15 @@ import { portfolioData } from '@/data/portfolio';
 export default function Home() {
   return (
     <Loader>
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
-        <Navigation />
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
+      <Navigation />
         <Hero personalInfo={portfolioData.personalInfo} socialLinks={portfolioData.socialLinks} />
         <Experience experience={portfolioData.experience} />
         <Projects projects={portfolioData.projects} />
         <Education education={portfolioData.education} />
         <Skills skills={portfolioData.skills} />
         <Footer />
-      </main>
+    </main>
     </Loader>
   );
 }

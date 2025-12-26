@@ -23,15 +23,15 @@ export default function Experience({ experience }: ExperienceProps) {
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 flex items-center justify-center gap-4">
             <div className="bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-3 rounded-3xl shadow-2xl">
               <Briefcase className="h-8 w-8 text-white" />
-            </div>
+      </div>
             <span className="gradient-text">Work Experience</span>
-          </h2>
+        </h2>
           <p className="text-gray-600 text-lg">Professional journey and achievements</p>
-        </div>
+                        </div>
         <div className="space-y-4">
           {experience.map((exp, index) => (
             <ExperienceItem key={index} exp={exp} index={index} />
-          ))}
+                            ))}
         </div>
       </div>
     </section>

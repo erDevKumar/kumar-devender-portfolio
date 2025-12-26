@@ -32,13 +32,13 @@ export default function Hero({ personalInfo, socialLinks }: HeroProps) {
               </div>
             )}
           </div>
-          
+
           {/* Right: Content - Centered */}
           <div className="text-center lg:text-center order-1 lg:order-2 flex flex-col items-center lg:items-center">
             <div className="mb-4 animate-fade-in">
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold mb-4 gradient-text leading-tight">
-                {personalInfo.name}
-              </h1>
+              {personalInfo.name}
+            </h1>
               <div className="w-24 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 mx-auto rounded-full"></div>
             </div>
             <h2 className="text-xl sm:text-2xl md:text-3xl text-gray-700 mb-10 font-light max-w-3xl leading-relaxed">
@@ -82,7 +82,7 @@ export default function Hero({ personalInfo, socialLinks }: HeroProps) {
                 <p className="text-xs font-semibold text-emerald-600">New Opportunities</p>
               </div>
             </div>
-            
+
             {/* Social Links - Centered */}
             <div className="flex justify-center mb-6">
               <SocialLinks socialLinks={socialLinks} email={personalInfo.email} size="lg" />
@@ -96,9 +96,9 @@ export default function Hero({ personalInfo, socialLinks }: HeroProps) {
             <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center justify-center gap-3">
               <div className="bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-3 rounded-2xl shadow-xl">
                 <MessageCircle className="h-7 w-7 text-white" />
-              </div>
+            </div>
               <span className="gradient-text">About Me</span>
-            </h2>
+          </h2>
             <p className="text-base sm:text-lg text-gray-700 leading-relaxed text-center">{personalInfo.bio}</p>
           </div>
         </div>

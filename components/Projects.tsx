@@ -23,15 +23,15 @@ export default function Projects({ projects }: ProjectsProps) {
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 flex items-center justify-center gap-4">
             <div className="bg-gradient-to-br from-teal-500 via-emerald-500 to-cyan-500 p-3 rounded-3xl shadow-2xl">
               <Code className="h-8 w-8 text-white" />
-            </div>
+      </div>
             <span className="gradient-text">Projects</span>
-          </h2>
+        </h2>
           <p className="text-gray-600 text-lg">Showcasing innovation and technical expertise</p>
-        </div>
+                    </div>
         <div className="space-y-4">
           {projects.map((project, index) => (
             <ProjectItem key={index} project={project} index={index} />
-          ))}
+                      ))}
         </div>
       </div>
     </section>

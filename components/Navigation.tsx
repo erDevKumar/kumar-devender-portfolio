@@ -26,8 +26,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <a href="#home" onClick={(e) => handleNavClick(e, '#home')} className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300">
-            Portfolio
-          </a>
+              Portfolio
+            </a>
           <div className="hidden md:flex space-x-10">
             {NAV_ITEMS.map((item) => (
               <a key={item.name} href={item.href} onClick={(e) => handleNavClick(e, item.href)} className="text-gray-700 hover:text-emerald-600 transition-all duration-300 font-semibold relative group">
@@ -38,7 +38,7 @@ export default function Navigation() {
           </div>
           <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden text-gray-700 hover:text-emerald-600 transition-colors p-2 rounded-lg hover:bg-emerald-50" aria-label="Toggle menu">
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+            </button>
         </div>
       </div>
       {isMobileMenuOpen && (

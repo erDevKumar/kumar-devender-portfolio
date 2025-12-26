@@ -23,9 +23,9 @@ export default function Education({ education }: EducationProps) {
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 flex items-center justify-center gap-4">
             <div className="bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-3 rounded-3xl shadow-2xl">
               <GraduationCap className="h-8 w-8 text-white" />
-            </div>
+      </div>
             <span className="gradient-text">Education</span>
-          </h2>
+        </h2>
           <p className="text-gray-600 text-lg">Academic background and qualifications</p>
         </div>
         <div className="space-y-4">
