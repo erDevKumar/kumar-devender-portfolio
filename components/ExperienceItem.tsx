@@ -28,28 +28,28 @@ export default function ExperienceItem({ exp, index }: ExperienceItemProps) {
             className="flex-shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 mb-1">
-              <Briefcase className="h-3.5 w-3.5 text-emerald-600/70" />
-              <h4 className="text-base font-bold text-gray-900">{exp.role}</h4>
+            <div className="flex items-center gap-2 mb-2">
+              <Briefcase className="h-4 w-4 text-emerald-600" />
+              <h4 className="text-lg font-bold text-gray-900">{exp.role}</h4>
             </div>
-            <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-              <h5 className="text-sm font-semibold text-emerald-600/80">{exp.company}</h5>
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <h5 className="text-base font-semibold gradient-text">{exp.company}</h5>
               {exp.companyInfo?.website && (
-                <a href={exp.companyInfo.website} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-                  <ExternalLink className="h-3 w-3 text-emerald-600/70 hover:text-emerald-700" />
+                <a href={exp.companyInfo.website} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="hover:scale-110 transition-transform">
+                  <ExternalLink className="h-4 w-4 text-emerald-600 hover:text-emerald-700" />
                 </a>
               )}
-              {exp.current && <span className="bg-green-100/80 text-green-800 text-xs font-semibold px-1.5 py-0.5 rounded-full">Current</span>}
+              {exp.current && <span className="bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full border border-green-200/50 shadow-sm">Current</span>}
             </div>
-            <div className="flex items-center gap-2 text-xs text-gray-600/80 flex-wrap">
-              <div className="flex items-center gap-1">
-                <Calendar className="h-3 w-3" />
-                <span>{exp.duration}</span>
+            <div className="flex items-center gap-3 text-sm text-gray-600 flex-wrap">
+              <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1 rounded-full">
+                <Calendar className="h-3.5 w-3.5 text-emerald-600" />
+                <span className="font-medium">{exp.duration}</span>
               </div>
               {exp.location && (
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3" />
-                  <span>{exp.location}</span>
+                <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1 rounded-full">
+                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
+                  <span className="font-medium">{exp.location}</span>
                 </div>
               )}
             </div>
@@ -58,13 +58,13 @@ export default function ExperienceItem({ exp, index }: ExperienceItemProps) {
       }
     >
       {exp.companyInfo?.description && (
-        <p className="text-xs text-gray-600/80 mb-2 italic border-l-2 border-emerald-200/50 pl-2 bg-emerald-50/50 py-1 rounded-r">
+        <p className="text-sm text-gray-700/90 mb-4 italic border-l-4 border-emerald-400/60 pl-4 bg-gradient-to-r from-emerald-50/50 to-teal-50/50 py-2 rounded-r-lg">
           {exp.companyInfo.description}
         </p>
       )}
-      <ul className="list-disc list-inside space-y-1 text-xs text-gray-700/80">
+      <ul className="list-disc list-inside space-y-2 text-sm text-gray-700/90 ml-2">
         {exp.description.map((item, idx) => (
-          <li key={idx}>{item}</li>
+          <li key={idx} className="leading-relaxed">{item}</li>
         ))}
       </ul>
     </Collapsible>
