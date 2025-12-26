@@ -1,3 +1,5 @@
+'use client';
+
 import { Linkedin, Github, Twitter, Mail, ExternalLink } from 'lucide-react';
 import { SocialLink } from '@/types/portfolio';
 
