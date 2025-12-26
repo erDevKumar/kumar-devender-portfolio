@@ -5,7 +5,7 @@ import { Code } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { useAnimatedGradient } from '@/hooks/useAnimatedGradient';
 import { groupBy } from '@/utils/helpers';
-import AnimatedBackground from '../common/AnimatedBackground';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import SkillCategory from './SkillCategory';
 
 interface SkillsProps {
