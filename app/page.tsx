@@ -1,11 +1,11 @@
-import Navigation from '@/components/layout/Navigation';
-import Footer from '@/components/layout/Footer';
-import Hero from '@/components/sections/Hero';
-import Experience from '@/components/sections/Experience';
-import Projects from '@/components/sections/Projects';
-import Education from '@/components/sections/Education';
-import Skills from '@/components/sections/Skills';
-import Loader from '@/components/common/Loader';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import Hero from '@/components/Hero';
+import Experience from '@/components/Experience';
+import Projects from '@/components/Projects';
+import Education from '@/components/Education';
+import Skills from '@/components/Skills';
+import Loader from '@/components/Loader';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Home() {

@@ -1,10 +1,10 @@
 'use client';
 
 import { PersonalInfo } from '@/types/portfolio';
-import SocialLinks from '../common/SocialLinks';
+import SocialLinks from '@/components/SocialLinks';
 import { ChevronDown, Mail, Phone, Linkedin, MessageCircle } from 'lucide-react';
 import { useAnimatedGradient } from '@/hooks/useAnimatedGradient';
-import AnimatedBackground from '../common/AnimatedBackground';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 interface HeroProps {
   personalInfo: PersonalInfo;

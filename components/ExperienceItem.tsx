@@ -2,8 +2,8 @@
 
 import { WorkExperience } from '@/types/portfolio';
 import { Calendar, MapPin, Briefcase, ExternalLink } from 'lucide-react';
-import Collapsible from '../common/Collapsible';
-import CompanyLogo from '../common/CompanyLogo';
+import Collapsible from '@/components/Collapsible';
+import CompanyLogo from '@/components/CompanyLogo';
 import { useExpandable } from '@/hooks/useExpandable';
 
 interface ExperienceItemProps {

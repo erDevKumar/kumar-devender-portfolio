@@ -4,7 +4,7 @@ import { WorkExperience } from '@/types/portfolio';
 import { Briefcase } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { useAnimatedGradient } from '@/hooks/useAnimatedGradient';
-import AnimatedBackground from '../common/AnimatedBackground';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import ExperienceItem from './ExperienceItem';
 
 interface ExperienceProps {

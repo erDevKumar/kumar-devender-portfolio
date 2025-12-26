@@ -2,7 +2,7 @@
 
 import { Skill } from '@/types/portfolio';
 import { Code, Users, Globe, Wrench, LucideIcon } from 'lucide-react';
-import Collapsible from '../common/Collapsible';
+import Collapsible from '@/components/Collapsible';
 import { useExpandable } from '@/hooks/useExpandable';
 import { CATEGORY_LABELS, PROFICIENCY_COLORS } from '@/utils/constants';
 import { getTechIcon } from '@/utils/helpers';

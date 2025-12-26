@@ -4,7 +4,7 @@ import { Education as EducationType } from '@/types/portfolio';
 import { GraduationCap } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { useAnimatedGradient } from '@/hooks/useAnimatedGradient';
-import AnimatedBackground from '../common/AnimatedBackground';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import EducationItem from './EducationItem';
 
 interface EducationProps {

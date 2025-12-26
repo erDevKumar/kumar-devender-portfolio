@@ -4,7 +4,7 @@ import { Project } from '@/types/portfolio';
 import { Code } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { useAnimatedGradient } from '@/hooks/useAnimatedGradient';
-import AnimatedBackground from '../common/AnimatedBackground';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import ProjectItem from './ProjectItem';
 
 interface ProjectsProps {

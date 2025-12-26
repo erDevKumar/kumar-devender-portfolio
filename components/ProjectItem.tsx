@@ -2,7 +2,7 @@
 
 import { Project } from '@/types/portfolio';
 import { Code } from 'lucide-react';
-import Collapsible from '../common/Collapsible';
+import Collapsible from '@/components/Collapsible';
 import { useExpandable } from '@/hooks/useExpandable';
 
 interface ProjectItemProps {
