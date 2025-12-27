@@ -20,30 +20,30 @@ export default function EducationSkills({ education, skills }: EducationSkillsPr
   const groupedSkills = groupBy(skills, 'category');
 
   return (
-    <section id="education" ref={ref} className="section-padding relative overflow-hidden" style={{ background: getGradient(160, 200, 140) }}>
-      <AnimatedBackground time={time} hue={(time * 10 + 160) % 360} />
+    <section id="education" ref={ref} className="section-padding relative overflow-hidden">
+      <AnimatedBackground time={time} hue={(time * 10 + 240) % 360} />
       <div className="max-w-7xl mx-auto container-padding relative z-10">
-        {/* Side by Side Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        {/* Side by Side Layout - Improved Spacing */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Education Column */}
           <div className="space-y-6">
             {/* Mobile Header */}
             <div className="lg:hidden mb-6">
-              <h3 className="text-2xl md:text-3xl font-bold gradient-text mb-2 flex items-center gap-3">
-                <GraduationCap className="h-6 w-6 text-emerald-600" />
+              <h3 className="text-2xl md:text-3xl font-bold gradient-text-tech mb-2 flex items-center gap-3">
+                <GraduationCap className="h-6 w-6 text-cyan-400" />
                 Education
               </h3>
-              <p className="text-gray-600">Academic background and qualifications</p>
+              <p className="text-gray-300">Academic background and qualifications</p>
             </div>
             {/* Desktop Header - Horizontally Aligned */}
             <div className="hidden lg:block mb-8">
-              <h3 className="text-2xl md:text-3xl font-bold gradient-text mb-2 flex items-center gap-3">
-                <div className="bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-3 rounded-2xl shadow-xl">
+              <h3 className="text-2xl md:text-3xl font-bold gradient-text-tech mb-2 flex items-center gap-3">
+                <div className="bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 p-3 rounded-2xl shadow-glow">
                   <GraduationCap className="h-6 w-6 text-white" />
                 </div>
                 Education
               </h3>
-              <p className="text-gray-600 text-sm">Academic background and qualifications</p>
+              <p className="text-gray-300 text-sm">Academic background and qualifications</p>
             </div>
             {education.map((edu, index) => (
               <EducationItem key={index} edu={edu} index={index} />
@@ -54,21 +54,21 @@ export default function EducationSkills({ education, skills }: EducationSkillsPr
           <div id="skills" className="space-y-6">
             {/* Mobile Header */}
             <div className="lg:hidden mb-6">
-              <h3 className="text-2xl md:text-3xl font-bold gradient-text mb-2 flex items-center gap-3">
-                <Code className="h-6 w-6 text-teal-600" />
+              <h3 className="text-2xl md:text-3xl font-bold gradient-text-tech mb-2 flex items-center gap-3">
+                <Code className="h-6 w-6 text-blue-400" />
                 Skills & Technologies
               </h3>
-              <p className="text-gray-600">Technical expertise and proficiencies</p>
+              <p className="text-gray-300">Technical expertise and proficiencies</p>
             </div>
             {/* Desktop Header - Horizontally Aligned */}
             <div className="hidden lg:block mb-8">
-              <h3 className="text-2xl md:text-3xl font-bold gradient-text mb-2 flex items-center gap-3">
-                <div className="bg-gradient-to-br from-teal-500 via-emerald-500 to-cyan-500 p-3 rounded-2xl shadow-xl">
+              <h3 className="text-2xl md:text-3xl font-bold gradient-text-tech mb-2 flex items-center gap-3">
+                <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 p-3 rounded-2xl shadow-glow">
                   <Code className="h-6 w-6 text-white" />
                 </div>
                 Skills & Technologies
               </h3>
-              <p className="text-gray-600 text-sm">Technical expertise and proficiencies</p>
+              <p className="text-gray-300 text-sm">Technical expertise and proficiencies</p>
             </div>
             {Object.entries(groupedSkills).map(([category, categorySkills], index) => (
               <SkillCategory key={category} category={category} skills={categorySkills} index={index} />

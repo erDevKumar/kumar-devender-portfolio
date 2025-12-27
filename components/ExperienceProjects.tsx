@@ -59,33 +59,33 @@ export default function ExperienceProjects({ experience, projects }: ExperienceP
   }, [experience, projects, companyNames]);
 
   return (
-    <section id="experience" ref={ref} className="section-padding relative overflow-hidden" style={{ background: getGradient(120, 80, 100) }}>
-      <AnimatedBackground time={time} hue={(time * 10 + 120) % 360} />
+    <section id="experience" ref={ref} className="section-padding relative overflow-hidden">
+      <AnimatedBackground time={time} hue={(time * 10 + 200) % 360} />
       <div className="max-w-7xl mx-auto container-padding relative z-10">
         {/* Combined Header */}
         <div className="mb-12 md:mb-16 text-center">
           <div className="flex items-center justify-center gap-4 mb-6 flex-wrap">
             <div className="flex items-center gap-4">
-              <div className="bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-4 rounded-3xl shadow-2xl">
+              <div className="bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 p-4 rounded-3xl shadow-glow">
                 <Briefcase className="h-8 w-8 md:h-10 md:w-10 text-white" />
               </div>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text">Experience</h2>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text-tech">Experience</h2>
             </div>
-            <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-emerald-300 to-transparent"></div>
+            <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-cyan-400/50 to-transparent"></div>
             <div className="flex items-center gap-4">
-              <div className="bg-gradient-to-br from-teal-500 via-emerald-500 to-cyan-500 p-4 rounded-3xl shadow-2xl">
+              <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 p-4 rounded-3xl shadow-glow">
                 <Code className="h-8 w-8 md:h-10 md:w-10 text-white" />
               </div>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text">Projects</h2>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text-tech">Projects</h2>
             </div>
           </div>
-          <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto text-balance">
+          <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto text-balance">
             Professional journey and innovative projects
           </p>
         </div>
 
-        {/* Single Column Layout - Experience with nested Projects */}
-        <div className="max-w-4xl mx-auto space-y-8">
+        {/* Single Column Layout - Experience with nested Projects - Improved Spacing */}
+        <div className="max-w-5xl mx-auto space-y-10">
           {experience.map((exp, index) => {
             const companyProjects = projectsByCompany[exp.company] || [];
             return (
@@ -100,9 +100,9 @@ export default function ExperienceProjects({ experience, projects }: ExperienceP
           
           {/* Show ungrouped projects if any */}
           {projectsByCompany['Other'] && projectsByCompany['Other'].length > 0 && (
-            <div className="mt-12 pt-8 border-t border-emerald-200/40">
-              <h3 className="text-2xl md:text-3xl font-bold gradient-text mb-6 flex items-center gap-3">
-                <div className="bg-gradient-to-br from-teal-500 via-emerald-500 to-cyan-500 p-3 rounded-2xl shadow-xl">
+            <div className="mt-12 pt-8 border-t border-cyan-500/30">
+              <h3 className="text-2xl md:text-3xl font-bold gradient-text-tech mb-6 flex items-center gap-3">
+                <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 p-3 rounded-2xl shadow-glow">
                   <Code className="h-6 w-6 text-white" />
                 </div>
                 Other Projects
@@ -110,21 +110,21 @@ export default function ExperienceProjects({ experience, projects }: ExperienceP
               <div className="space-y-6">
                 {projectsByCompany['Other'].map((project, idx) => (
                   <div key={`other-proj-${idx}`} className="ml-8 md:ml-12">
-                    <div className="glass-card rounded-3xl p-6 md:p-8 hover:shadow-soft-lg transition-all duration-500 border border-emerald-200/40 shadow-soft-lg card-hover">
+                    <div className="glass-card-dark rounded-3xl p-6 md:p-8 hover:shadow-tech-lg transition-all duration-500 border border-cyan-500/30 shadow-tech card-hover code-border">
                       <div className="flex items-center gap-4 mb-4">
-                        <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-3 rounded-2xl shadow-xl flex-shrink-0">
+                        <div className="bg-gradient-to-br from-cyan-500 to-blue-600 p-3 rounded-2xl shadow-glow flex-shrink-0">
                           <Code className="h-5 w-5 md:h-6 md:w-6 text-white" />
                         </div>
-                        <h4 className="text-lg md:text-xl font-bold text-gray-900">{project.name}</h4>
+                        <h4 className="text-lg md:text-xl font-bold text-gray-100">{project.name}</h4>
                       </div>
-                      <p className="text-sm md:text-base text-gray-700/90 mb-6 leading-relaxed">
+                      <p className="text-sm md:text-base text-gray-300/90 mb-6 leading-relaxed">
                         {project.description}
                       </p>
                       <div className="flex flex-wrap gap-2.5">
                         {project.technologies.map((tech, techIdx) => (
                           <span 
                             key={techIdx} 
-                            className="bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 font-semibold text-xs md:text-sm px-4 py-2 rounded-full border border-emerald-200/50 shadow-soft hover:shadow-md hover:scale-105 transition-all duration-300"
+                            className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 font-semibold text-xs md:text-sm px-4 py-2 rounded-full border border-cyan-500/30 shadow-soft hover:shadow-glow hover:scale-105 transition-all duration-300"
                           >
                             {tech}
                           </span>

@@ -3,12 +3,12 @@ import { PortfolioData } from '@/types/portfolio';
 export const portfolioData: PortfolioData = {
   personalInfo: {
     name: 'Devender Kumar',
-    title: 'Driving Scalable & Engaging User Experiences at LOCO • 10+ Years in Mobile App Development',
+    title: 'Lead Software Engineer • 10.5 Years in Mobile App Development',
     location: 'India',
-    bio: 'Expertise in Android Development and technologies, with 10+ Years of experience with different product organisations targeting C2C, B2B and B2C. Have built/contributed apps with huge user base like Delivery Partner App at Zomato, Scooter Companion app at OlaElectric. Well-Equipped with tactics towards delivering a high quality mobile application having a huge user base and complex functionalities. Very familiar with latest updates around the technologies related to Android Development.',
+    bio: 'Lead Software Engineer with 10.5 Years of experience with different product companies targeting B2B/B2C/C2C. Expertise in Android technology and behaviours of different android devices for apps. Well-Equipped with tactics towards delivering a high quality mobile apps having a huge user base and complex functionalities. 4 Years experience of guiding and mentoring the team.',
     email: 'erkumardevender@gmail.com',
     phone: '+91-8901111320',
-    profileImage: 'https://media.licdn.com/dms/image/v2/D4E03AQHAOm5P3qDCZg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1635158924477?e=1768435200&v=beta&t=xXstMwHFJ5-26YmKjT3416E-n2s4C-5C137obfBKGcs',
+    profileImage: '/profile.jpg',
   },
   experience: [
     {
@@ -108,7 +108,7 @@ export const portfolioData: PortfolioData = {
         founded: '2011',
         website: 'https://www.appster.com.au',
         description: 'Appster was a mobile app development company that provided services for startups and enterprises to build and scale their mobile applications. The company focused on delivering end-to-end solutions from ideation to development and maintenance.',
-        // logo: '/logos/appster_logo.jpg', // Logo not available - using fallback initial
+        logo: '/logos/appster_logo.jpg',
       },
     },
   ],
@@ -186,7 +186,7 @@ export const portfolioData: PortfolioData = {
   projects: [
     {
       name: 'Companion App - Ola Electric',
-      description: "Ola's different models electric scooters are managed by this app. Used RoomDB to support multiple scooters in one app with offline mode capability. Implemented Scooter State Transitions using State machines on top of Graph API. Migrated android app from API 31→33→34 and AGP 8 migration. Improved clean architecture and reduced build time.",
+      description: "Ola's different models electric scooters are managed by this app. Development/Tech Contribution: Multiple Scooter In one App - Used RoomDB to give the support for this feature as the app was supposed to be usable in offline mode. Scooter State Transitions - Used Internets on the top of Graph API, to create a state machine. Migrated android app from API 31→33→34. AGP 8 migration. Clean architecture improvements and reduced the build time.",
       technologies: ['Kotlin', 'RoomDB', 'State Machines', 'Graph API', 'Clean Architecture', 'AGP 8'],
     },
     {
@@ -196,12 +196,12 @@ export const portfolioData: PortfolioData = {
     },
     {
       name: 'Captain App - Rivigo',
-      description: 'Used for first-mile (Pick-Ups) and last-mile (deliveries) for a logistics consignment fulfilment.',
+      description: 'It is used for first-mile (Pick-Ups) and last-mile (deliveries) for a logistics consignment fulfilment.',
       technologies: ['Android', 'Maps', 'Location Services', 'Real-time Tracking'],
     },
     {
       name: 'Pilot App - Rivigo',
-      description: 'Used for middle-mile for a logistics consignment fulfilment. Truck drivers are assigned duty, and their relay delivery is carried out.',
+      description: 'It is used for middle-mile for a logistics consignment fulfilment. Truck drivers are assigned duty, and their relay delivery is carried out.',
       technologies: ['Android', 'Route Optimization', 'Duty Management'],
     },
     {
@@ -219,6 +219,10 @@ export const portfolioData: PortfolioData = {
     {
       platform: 'LinkedIn',
       url: 'https://www.linkedin.com/in/erkumardevender/',
+    },
+    {
+      platform: 'GitHub',
+      url: 'https://github.com/erDevKumar',
     },
   ],
 };
