@@ -31,8 +31,8 @@ export default function Skills({ skills }: SkillsProps) {
           <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto text-balance">Technical expertise and proficiencies</p>
         </div>
         <div className="space-y-6">
-          {Object.entries(groupedSkills).map(([category, categorySkills]) => (
-            <SkillCategory key={category} category={category} skills={categorySkills} />
+          {Object.entries(groupedSkills).map(([category, categorySkills], index) => (
+            <SkillCategory key={category} category={category} skills={categorySkills} index={index} />
           ))}
         </div>
       </div>

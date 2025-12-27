@@ -30,7 +30,7 @@ export default function Education({ education }: EducationProps) {
         </div>
         <div className="space-y-6">
           {education.map((edu, index) => (
-            <EducationItem key={index} edu={edu} />
+            <EducationItem key={index} edu={edu} index={index} />
           ))}
         </div>
       </div>
