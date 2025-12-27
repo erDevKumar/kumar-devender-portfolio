@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export', // Enable static export for Firebase hosting
   images: {
-    unoptimized: false,
+    unoptimized: true, // Required for static export
     remotePatterns: [
       {
         protocol: 'https',

@@ -16,20 +16,21 @@ export default function Education({ education }: EducationProps) {
   const { time, getGradient } = useAnimatedGradient(160, 10);
 
   return (
-    <section id="education" ref={ref} className="py-16 relative overflow-hidden" style={{ background: getGradient(160, 200, 140) }}>
+    <section id="education" ref={ref} className="section-padding relative overflow-hidden" style={{ background: getGradient(160, 200, 140) }}>
       <AnimatedBackground time={time} hue={(time * 10 + 160) % 360} />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className={`mb-10 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
-            <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-2 rounded-2xl shadow-lg">
-              <GraduationCap className="h-6 w-6 text-white" />
+      <div className="max-w-7xl mx-auto container-padding relative z-10">
+        <div className={`mb-16 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 flex items-center justify-center gap-4">
+            <div className="bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-4 rounded-3xl shadow-2xl">
+              <GraduationCap className="h-8 w-8 md:h-10 md:w-10 text-white" />
             </div>
-            Education
+            <span className="gradient-text">Education</span>
           </h2>
+          <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto text-balance">Academic background and qualifications</p>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-6">
           {education.map((edu, index) => (
-            <EducationItem key={index} edu={edu} />
+            <EducationItem key={index} edu={edu} index={index} />
           ))}
         </div>
       </div>
