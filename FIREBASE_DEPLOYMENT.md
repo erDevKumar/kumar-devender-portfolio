@@ -64,3 +64,4 @@ The `firebase.json` file is already configured with:
 - **Public directory**: `out`
 - **Rewrites**: All routes redirect to `/index.html` (for client-side routing)
 
+

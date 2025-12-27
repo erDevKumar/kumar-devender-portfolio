@@ -134,3 +134,4 @@ cat firebase.json
 
 Once you complete Step 1 (login), you can run `./deploy.sh` and your portfolio will be live!
 
+
