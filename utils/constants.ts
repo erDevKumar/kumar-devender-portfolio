@@ -13,10 +13,10 @@ export const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export const PROFICIENCY_COLORS: Record<string, string> = {
-  beginner: 'bg-blue-100/80 text-blue-800',
-  intermediate: 'bg-amber-100/80 text-amber-800',
-  advanced: 'bg-emerald-100/80 text-emerald-800',
-  expert: 'bg-purple-100/80 text-purple-800',
+  beginner: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+  intermediate: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
+  advanced: 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30',
+  expert: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
 };
 
 export const TECH_ICONS: Record<string, string> = {
