@@ -34,3 +34,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Admin data (optional - you may want to track this)
+# /data/portfolio.json
