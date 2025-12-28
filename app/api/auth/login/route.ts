@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminPassword } from '@/lib/firebase-admin';
 
-const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXT_PUBLIC_JWT_SECRET || 'your-secret-key-change-in-production';
+const ADMIN_PASSWORD = 'admin@password';
 
 // Simple JWT implementation (or use jsonwebtoken package)
 function createToken(payload: { admin: boolean; timestamp: number }): string {
@@ -22,18 +21,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get admin password from Firebase Remote Config
-    const adminPassword = await getAdminPassword();
-
-    if (!adminPassword) {
-      return NextResponse.json(
-        { error: 'Authentication not configured. Please set admin_password in Firebase Remote Config.' },
-        { status: 500 }
-      );
-    }
-
-    // Check password (case-sensitive)
-    if (password !== adminPassword) {
+          // Check password (case-sensitive)
+          if (password !== ADMIN_PASSWORD) {
       return NextResponse.json(
         { error: 'Invalid password' },
         { status: 401 }

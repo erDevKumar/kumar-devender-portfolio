@@ -37,11 +37,10 @@ export default function AdminLogin() {
         }
       }
 
-      // If API route fails (static site), check password from build-time env var
-      // Note: For static sites, password must be set at build time via NEXT_PUBLIC_ADMIN_PASSWORD
-      const staticPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+      // If API route fails (static site), use hardcoded password
+      const staticPassword = 'admin@password';
       
-      if (staticPassword && password === staticPassword) {
+      if (password === staticPassword) {
         localStorage.setItem('admin_auth_token', 'authenticated');
         router.push('/admin');
         router.refresh();
@@ -50,10 +49,10 @@ export default function AdminLogin() {
         setLoading(false);
       }
     } catch (err) {
-      // If API doesn't exist (static site), use build-time env var
-      const staticPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+      // If API doesn't exist (static site), use hardcoded password
+      const staticPassword = 'admin@password';
       
-      if (staticPassword && password === staticPassword) {
+      if (password === staticPassword) {
         localStorage.setItem('admin_auth_token', 'authenticated');
         router.push('/admin');
         router.refresh();

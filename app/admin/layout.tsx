@@ -9,7 +9,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start as false for immediate render
   const [sidebarOpen, setSidebarOpen] = useState(true); // Default to true for desktop
   const [isMobile, setIsMobile] = useState(false);
 
@@ -37,31 +37,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, []);
 
   useEffect(() => {
-    // Check authentication - for static sites, use localStorage only
-    const checkAuth = () => {
-      if (pathname === '/admin/login') {
-        setLoading(false);
-        return;
-      }
-
-      // For static export (Firebase Hosting), API routes don't work
-      // Use localStorage as the only auth method
-      const localToken = localStorage.getItem('admin_auth_token');
-      
-      if (localToken === 'authenticated') {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-        // Only redirect if we're not already on login page
-        if (pathname !== '/admin/login') {
-          router.push('/admin/login');
-        }
-      }
-      
+    // Check authentication immediately - for static sites, use localStorage only
+    if (typeof window === 'undefined') return;
+    
+    if (pathname === '/admin/login') {
+      setIsAuthenticated(false);
       setLoading(false);
-    };
+      return;
+    }
 
-    checkAuth();
+    // For static export (Firebase Hosting), API routes don't work
+    // Use localStorage as the only auth method
+    const localToken = localStorage.getItem('admin_auth_token');
+    
+    if (localToken === 'authenticated') {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+      // Redirect to login if not authenticated
+      router.push('/admin/login');
+    }
+    
+    setLoading(false);
   }, [pathname, router]);
 
   const handleLogout = async () => {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import React from 'react';
 import './globals.css';
 import { portfolioData } from '@/data/portfolio';
+import { AdminProvider } from '@/contexts/AdminContext';
 
 export const metadata: Metadata = {
   title: `${portfolioData.personalInfo.name} - ${portfolioData.personalInfo.title}`,
@@ -52,7 +52,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AdminProvider>
+          {children}
+        </AdminProvider>
+      </body>
     </html>
   );
 }

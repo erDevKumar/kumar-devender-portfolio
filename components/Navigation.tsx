@@ -1,12 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Download } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X, Download, Shield } from 'lucide-react';
 import { NAV_ITEMS } from '@/utils/constants';
+import { portfolioData } from '@/data/portfolio';
+import { generateResumePDF } from '@/utils/generateResumePDF';
+import AdminModal from '@/components/AdminModal';
+import { useAdmin } from '@/contexts/AdminContext';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const { isAdminOpen, openAdmin, closeAdmin, isAuthenticated } = useAdmin();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -23,6 +29,21 @@ export default function Navigation() {
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
     setIsMobileMenuOpen(false);
+  };
+
+  const handleDownloadResume = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (isGeneratingPDF) return;
+    
+    setIsGeneratingPDF(true);
+    try {
+      await generateResumePDF(portfolioData);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   return (
@@ -57,15 +78,29 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* Resume Button & Mobile Menu */}
+          {/* Resume Button, Admin Button & Mobile Menu */}
           <div className="flex items-center gap-4">
-            <a
-              href="/resume.pdf"
-              download
-              className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold rounded-lg hover:from-purple-500 hover:to-purple-400 transition-all duration-200 shadow-lg shadow-purple-500/25"
+            <button
+              onClick={() => {
+                if (isAuthenticated && isAdminOpen) {
+                  closeAdmin();
+                } else {
+                  openAdmin();
+                }
+              }}
+              className="hidden md:inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-700 to-gray-600 text-white font-semibold rounded-lg hover:from-gray-600 hover:to-gray-500 transition-all duration-200 shadow-lg"
+              title="Admin Panel"
             >
-              <Download className="w-4 h-4" />
-              Resume
+              <Shield className="w-4 h-4" />
+              <span className="hidden lg:inline">{isAuthenticated && isAdminOpen ? 'Close Admin' : 'Admin'}</span>
+            </button>
+            <a
+              href="#"
+              onClick={handleDownloadResume}
+              className={`hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold rounded-lg hover:from-purple-500 hover:to-purple-400 transition-all duration-200 shadow-lg shadow-purple-500/25 ${isGeneratingPDF ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <Download className={`w-4 h-4 ${isGeneratingPDF ? 'animate-spin' : ''}`} />
+              {isGeneratingPDF ? 'Generating...' : 'Resume'}
             </a>
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
@@ -92,17 +127,37 @@ export default function Navigation() {
                 {item.name}
               </a>
             ))}
-            <a
-              href="/resume.pdf"
-              download
-              className="flex items-center gap-2 px-4 py-3 mt-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold rounded-lg"
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                if (isAuthenticated && isAdminOpen) {
+                  closeAdmin();
+                } else {
+                  openAdmin();
+                }
+              }}
+              className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-gray-700 to-gray-600 text-white font-semibold rounded-lg"
             >
-              <Download className="w-4 h-4" />
-              Resume
+              <Shield className="w-4 h-4" />
+              {isAuthenticated && isAdminOpen ? 'Close Admin' : 'Admin Panel'}
+            </button>
+            <a
+              href="#"
+              onClick={handleDownloadResume}
+              className={`flex items-center gap-2 px-4 py-3 mt-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold rounded-lg ${isGeneratingPDF ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <Download className={`w-4 h-4 ${isGeneratingPDF ? 'animate-spin' : ''}`} />
+              {isGeneratingPDF ? 'Generating...' : 'Resume'}
             </a>
           </div>
         </div>
       )}
+
+      {/* Admin Modal */}
+      <AdminModal 
+        isOpen={isAdminOpen && !isAuthenticated} 
+        onClose={closeAdmin} 
+      />
     </nav>
   );
 }
