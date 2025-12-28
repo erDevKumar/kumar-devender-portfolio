@@ -69,35 +69,35 @@ export default function SkillCategory({ category, skills, index }: SkillCategory
         }`}></div>
         
         {/* Content */}
-        <div className="p-6 lg:p-8">
+        <div className="p-4 sm:p-6 lg:p-8">
           {/* Header */}
-          <div className="flex items-center gap-4 w-full">
+          <div className="flex items-center gap-3 sm:gap-4 w-full">
             {/* Icon */}
-            <div className={`flex-shrink-0 p-4 rounded-2xl bg-gradient-to-br ${colors.gradient} border ${colors.border} group-hover:scale-110 transition-transform duration-300`}>
-              <Icon className={`h-6 w-6 ${colors.icon}`} />
+            <div className={`flex-shrink-0 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br ${colors.gradient} border ${colors.border} group-hover:scale-110 transition-transform duration-300`}>
+              <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${colors.icon}`} />
             </div>
 
             {/* Title and Count */}
             <div className="flex-1 min-w-0">
-              <h4 className="text-xl lg:text-2xl font-bold text-white group-hover:text-blue-400 transition-colors mb-1">
+              <h4 className="text-lg sm:text-xl lg:text-2xl font-bold text-white group-hover:text-blue-400 transition-colors mb-1 break-words">
                 {CATEGORY_LABELS[category] || category}
               </h4>
-              <p className="text-sm text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-400">
                 {skills.length} {skills.length === 1 ? 'skill' : 'skills'}
               </p>
             </div>
 
             {/* Badge and Expand Indicator */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <div className={`px-3 py-1.5 rounded-lg text-sm font-bold ${colors.badge} border flex items-center gap-1.5`}>
-                <Sparkles className="h-3.5 w-3.5" />
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+              <div className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-bold ${colors.badge} border flex items-center gap-1 sm:gap-1.5`}>
+                <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                 <span>{skills.length}</span>
               </div>
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-700/50 text-gray-300 group-hover:bg-blue-500/20 group-hover:text-blue-400 group-hover:border-blue-500/50 border border-gray-600/50 transition-all duration-200">
+              <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gray-700/50 text-gray-300 group-hover:bg-blue-500/20 group-hover:text-blue-400 group-hover:border-blue-500/50 border border-gray-600/50 transition-all duration-200">
                 {expanded ? (
-                  <ChevronUp className="h-5 w-5" />
+                  <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5" />
                 ) : (
-                  <ChevronDown className="h-5 w-5" />
+                  <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5" />
                 )}
               </div>
             </div>
@@ -105,35 +105,37 @@ export default function SkillCategory({ category, skills, index }: SkillCategory
 
           {/* Collapsible Content */}
           <div
-            className="grid grid-rows-transition mt-6"
+            className="grid grid-rows-transition mt-4 sm:mt-6"
             style={{
               gridTemplateRows: expanded ? '1fr' : '0fr',
             }}
           >
             <div className="overflow-hidden min-h-0">
-              <div className="pt-6 border-t border-gray-700/50">
-                <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
+              <div className="pt-4 sm:pt-6 border-t border-gray-700/50">
+                <div className="grid gap-2 sm:gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 160px), 1fr))' }}>
                   {skills.map((skill, idx) => {
                     const techIcon = getTechIcon(skill.name);
                     return (
                       <div 
                         key={idx} 
-                        className="group/skill flex items-start gap-3 px-4 py-3 rounded-xl bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-200"
+                        className="group/skill flex items-start gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-200"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gray-700/50 border border-gray-600/50 flex items-center justify-center group-hover/skill:scale-110 transition-transform duration-200 mt-0.5">
+                        <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gray-700/50 border border-gray-600/50 flex items-center justify-center group-hover/skill:scale-110 transition-transform duration-200 mt-0.5">
                           {techIcon ? (
                             <img 
                               src={techIcon} 
                               alt={skill.name} 
-                              className="h-5 w-5 object-contain" 
+                              className="h-4 w-4 sm:h-5 sm:w-5 object-contain" 
+                              crossOrigin="anonymous"
+                              referrerPolicy="no-referrer"
                             />
                           ) : (
-                            <Icon className={`h-5 w-5 ${colors.icon}`} />
+                            <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${colors.icon}`} />
                           )}
                         </div>
                         <div className="flex-1 min-w-0 overflow-hidden">
-                          <span className="text-sm font-semibold text-white group-hover/skill:text-blue-400 transition-colors" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal' }}>
+                          <span className="text-xs sm:text-sm font-semibold text-white group-hover/skill:text-blue-400 transition-colors" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'normal' }}>
                             {skill.name}
                           </span>
                         </div>

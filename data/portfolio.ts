@@ -106,7 +106,7 @@ export const portfolioData: PortfolioData = {
       companyInfo: {
         industry: 'Software Development, Mobile App Development',
         founded: '2011',
-        website: 'https://www.appster.com.au',
+        website: 'https://www.linkedin.com/company/appster',
         description: 'Appster was a mobile app development company that provided services for startups and enterprises to build and scale their mobile applications. The company focused on delivering end-to-end solutions from ideation to development and maintenance.',
         logo: '/logos/appster_logo.jpg',
       },

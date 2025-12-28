@@ -25,7 +25,7 @@ const DEVICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons';
 
 export const TECH_ICONS: Record<string, string> = {
   // Languages - Verified icons
-  Java: `${DEVICON_BASE}/java/java-original.svg`,
+  Java: `${SIMPLE_ICONS_BASE}/java.svg`,
   Kotlin: `${SIMPLE_ICONS_BASE}/kotlin.svg`,
   JavaScript: `${SIMPLE_ICONS_BASE}/javascript.svg`,
   TypeScript: `${SIMPLE_ICONS_BASE}/typescript.svg`,

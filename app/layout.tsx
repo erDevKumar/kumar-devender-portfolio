@@ -16,16 +16,28 @@ export const metadata: Metadata = {
       .map((s) => s.name),
   ].join(', '),
   authors: [{ name: portfolioData.personalInfo.name }],
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  icons: {
+    icon: portfolioData.personalInfo.profileImage || '/profile.jpg',
+    shortcut: portfolioData.personalInfo.profileImage || '/profile.jpg',
+    apple: portfolioData.personalInfo.profileImage || '/profile.jpg',
+  },
   openGraph: {
     title: `${portfolioData.personalInfo.name} - Portfolio`,
     description: portfolioData.personalInfo.bio,
     type: 'website',
     url: 'https://yourportfolio.com',
+    images: portfolioData.personalInfo.profileImage ? [portfolioData.personalInfo.profileImage] : [],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${portfolioData.personalInfo.name} - Portfolio`,
     description: portfolioData.personalInfo.bio,
+    images: portfolioData.personalInfo.profileImage ? [portfolioData.personalInfo.profileImage] : [],
   },
   robots: {
     index: true,
