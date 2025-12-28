@@ -98,7 +98,7 @@ export default function SocialLinksPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold gradient-text-tech mb-2">Social Links</h1>
-          <p className="text-gray-400">Manage your social media links</p>
+          <p className="text-gray-200">Manage your social media links</p>
         </div>
         <button
           onClick={handleAdd}

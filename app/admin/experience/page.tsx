@@ -164,7 +164,7 @@ export default function ExperiencePage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold gradient-text-tech mb-2">Work Experience</h1>
-          <p className="text-gray-400">Manage your work experience entries</p>
+          <p className="text-gray-200">Manage your work experience entries</p>
         </div>
         <button
           onClick={handleAdd}
@@ -389,8 +389,8 @@ export default function ExperiencePage() {
             ) : (
               <div className="text-gray-300">
                 <p className="font-semibold">{exp.role}</p>
-                <p className="text-sm text-gray-400">{exp.duration}</p>
-                <p className="text-sm text-gray-400 mt-2">{exp.location}</p>
+                <p className="text-sm text-gray-200">{exp.duration}</p>
+                <p className="text-sm text-gray-200 mt-2">{exp.location}</p>
               </div>
             )}
           </div>

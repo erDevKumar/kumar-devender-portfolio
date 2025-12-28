@@ -150,7 +150,7 @@ export default function ProjectsPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold gradient-text-tech mb-2">Projects</h1>
-          <p className="text-gray-400">Manage your projects</p>
+          <p className="text-gray-200">Manage your projects</p>
         </div>
         <button
           onClick={handleAdd}

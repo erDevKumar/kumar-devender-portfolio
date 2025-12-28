@@ -1,113 +1,160 @@
 'use client';
 
-import { PersonalInfo } from '@/types/portfolio';
+import { PersonalInfo, WorkExperience, Project } from '@/types/portfolio';
 import SocialLinks from '@/components/SocialLinks';
-import { ChevronDown, Mail, Phone, Linkedin, MessageCircle } from 'lucide-react';
-import { useAnimatedGradient } from '@/hooks/useAnimatedGradient';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import { ChevronDown } from 'lucide-react';
 
 interface HeroProps {
   personalInfo: PersonalInfo;
   socialLinks: Array<{ platform: string; url: string }>;
+  experience?: WorkExperience[];
+  projects?: Project[];
 }
 
-export default function Hero({ personalInfo, socialLinks }: HeroProps) {
-  const { time, getGradient } = useAnimatedGradient(180, 8);
-  const linkedInUrl = socialLinks.find(link => link.platform.toLowerCase() === 'linkedin')?.url || '';
-  const githubUrl = socialLinks.find(link => link.platform.toLowerCase() === 'github')?.url || '';
+export default function Hero({ personalInfo, socialLinks, experience = [], projects = [] }: HeroProps) {
+  // Split name for gradient effect
+  const nameParts = personalInfo.name.split(' ');
+  const firstName = nameParts[0] || personalInfo.name;
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  // Calculate statistics
+  const yearsExperience = experience.length > 0 
+    ? experience.reduce((acc, exp) => acc + 2, 0) // Approximate 2 years per experience
+    : 10.5; // Fallback
+  const topCompanies = experience.length > 0 
+    ? new Set(experience.map(exp => exp.company)).size 
+    : 6;
+  const projectsDelivered = projects.length || 15;
+  const leadershipYears = experience.length > 0
+    ? experience.filter(exp => 
+        exp.role.toLowerCase().includes('lead') || 
+        exp.role.toLowerCase().includes('senior') ||
+        exp.role.toLowerCase().includes('manager')
+      ).length * 2
+    : 4;
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
-      <AnimatedBackground time={time} hue={(time * 8 + 200) % 360} />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16">
-        {/* Main Hero Section - Side by Side Layout: Profile + About Me with Height Symmetry */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch mb-16">
-          {/* Left: Profile Image and Info */}
-          <div className="flex flex-col items-center lg:items-start animate-fade-in h-full">
-            {personalInfo.profileImage && (
-              <div className="relative group mb-5 lg:mb-6 w-full flex justify-center lg:justify-start">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 rounded-full blur-3xl opacity-40 group-hover:opacity-60 transition-opacity duration-700 animate-tech-pulse"></div>
-                <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden ring-4 ring-cyan-500/30 shadow-tech-lg bg-tech-800/50 flex items-center justify-center hover:scale-105 transition-all duration-700 card-hover">
-                  <img src={personalInfo.profileImage} alt={`${personalInfo.name} - Profile`} className="w-full h-full object-cover" />
-                </div>
-              </div>
-            )}
-
-            {/* Name and Title */}
-            <div className="text-center lg:text-left mb-5 lg:mb-6 w-full">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 lg:mb-3 gradient-text-tech leading-[1.1] tracking-tight">
-                {personalInfo.name}
+    <section id="home" className="min-h-screen flex items-center justify-center pt-20 bg-[#111827] relative overflow-hidden">
+      {/* Gradient Background Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/15 via-transparent to-purple-950/15"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/8 rounded-full blur-3xl"></div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 relative z-10">
+        {/* Main Hero Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Left: Name and About Section */}
+          <div className="flex flex-col animate-fade-in-up">
+            {/* Name with Gradient Effect */}
+            <div className="mb-6">
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight mb-2">
+                <span className="text-white">{firstName}</span>
+                {lastName && (
+                  <span className="block bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-500 bg-clip-text text-transparent">
+                    {lastName}
+                  </span>
+                )}
               </h1>
-              <div className="w-16 lg:w-20 h-0.5 lg:h-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 mx-auto lg:mx-0 rounded-full shadow-glow-cyan mb-3 lg:mb-4"></div>
-              <h2 className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 font-light leading-relaxed text-balance">
+              <h2 className="text-xl md:text-2xl text-gray-200 font-medium mt-2">
                 {personalInfo.title}
               </h2>
             </div>
 
-            {/* Social Links */}
-            <div className="flex justify-center lg:justify-start mb-5 lg:mb-6 w-full">
-              <SocialLinks socialLinks={socialLinks} email={personalInfo.email} size="lg" />
-            </div>
-            
-            {/* Contact Cards - Compact 2x2 Grid with Equal Heights */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-md lg:max-w-full flex-1">
-              {personalInfo.email && (
-                <a href={`mailto:${personalInfo.email}`} className="glass-card-dark rounded-xl p-3 sm:p-4 shadow-tech hover:shadow-glow transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1 border border-cyan-500/30 flex flex-col items-center justify-center h-full min-h-[110px] sm:min-h-[130px] group shine-effect card-hover">
-                  <div className="bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 p-2 sm:p-2.5 rounded-lg shadow-glow mb-2 group-hover:scale-110 transition-all duration-300">
-                    <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-100 mb-1">Email</h4>
-                  <p className="text-[9px] sm:text-[10px] font-medium text-cyan-400 break-all text-center leading-tight px-1">{personalInfo.email}</p>
-                </a>
-              )}
-              {personalInfo.phone && (
-                <a href={`tel:${personalInfo.phone}`} className="glass-card-dark rounded-xl p-3 sm:p-4 shadow-tech hover:shadow-glow transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1 border border-blue-500/30 flex flex-col items-center justify-center h-full min-h-[110px] sm:min-h-[130px] group shine-effect card-hover">
-                  <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 p-2 sm:p-2.5 rounded-lg shadow-glow mb-2 group-hover:scale-110 transition-all duration-300">
-                    <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-100 mb-1">Phone</h4>
-                  <p className="text-[10px] sm:text-xs font-medium text-blue-400">{personalInfo.phone}</p>
-                </a>
-              )}
-              {linkedInUrl && (
-                <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="glass-card-dark rounded-xl p-3 sm:p-4 shadow-tech hover:shadow-glow transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1 border border-blue-500/30 flex flex-col items-center justify-center h-full min-h-[110px] sm:min-h-[130px] group shine-effect card-hover">
-                  <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 p-2 sm:p-2.5 rounded-lg shadow-glow mb-2 group-hover:scale-110 transition-all duration-300 flex items-center justify-center">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="LinkedIn" className="h-4 w-4 sm:h-5 sm:w-5 filter brightness-0 invert" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-100 mb-1">LinkedIn</h4>
-                  <p className="text-[10px] sm:text-xs font-medium text-blue-400">View Profile</p>
-                </a>
-              )}
-              {githubUrl && (
-                <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="glass-card-dark rounded-xl p-3 sm:p-4 shadow-tech hover:shadow-glow transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-1 border border-gray-500/30 flex flex-col items-center justify-center h-full min-h-[110px] sm:min-h-[130px] group shine-effect card-hover">
-                  <div className="bg-gradient-to-br from-gray-600 via-gray-700 to-gray-800 p-2 sm:p-2.5 rounded-lg shadow-glow mb-2 group-hover:scale-110 transition-all duration-300">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub" className="h-4 w-4 sm:h-5 sm:w-5 filter brightness-0 invert" />
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-100 mb-1">GitHub</h4>
-                  <p className="text-[10px] sm:text-xs font-medium text-gray-400">View Profile</p>
-                </a>
-              )}
+            {/* Professional Summary / About - Title Removed */}
+            <div className="space-y-4">
+              <p className="text-lg text-white leading-relaxed max-w-2xl">
+                {personalInfo.bio}
+              </p>
             </div>
           </div>
 
-          {/* Right: About Me Section - Matching Height */}
-          <div className="animate-fade-in h-full flex" style={{ animationDelay: '0.2s' }}>
-            <div className="glass-card-dark rounded-3xl p-6 md:p-8 lg:p-10 border border-cyan-500/30 shadow-tech hover:shadow-glow transition-all duration-500 card-hover code-border w-full flex flex-col">
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-100 mb-4 lg:mb-6 flex items-center gap-3">
-                <div className="bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 p-2.5 md:p-3 rounded-xl shadow-glow flex-shrink-0">
-                  <MessageCircle className="h-5 w-5 md:h-6 md:w-6 text-white" />
+          {/* Right: Photo, Social Links, and Stats */}
+          <div className="flex flex-col items-center lg:items-end gap-6 animate-fade-in-up stagger-2">
+            {/* Profile Image with Corner Badges */}
+            {personalInfo.profileImage && (
+              <div className="relative">
+                <div className="relative w-48 h-48 lg:w-56 lg:h-56 rounded-2xl overflow-hidden ring-4 ring-white/10 shadow-2xl">
+                  <img 
+                    src={personalInfo.profileImage} 
+                    alt={`${personalInfo.name} - Profile`} 
+                    className="w-full h-full object-cover" 
+                  />
                 </div>
-                <span className="gradient-text-tech">About Me</span>
-              </h2>
-              <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed text-balance flex-1">{personalInfo.bio}</p>
+                {/* Decorative gradient overlay */}
+                <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-indigo-500/20 rounded-2xl blur-xl -z-10"></div>
+                
+                {/* Top Left Badge - Years Experience - Darkened */}
+                <div className="absolute -top-3 -left-3 px-2.5 py-1.5 rounded-lg bg-gradient-to-br from-orange-600/50 to-orange-700/50 border border-orange-600/60 backdrop-blur-sm shadow-xl animate-bounce-subtle hover:scale-110 transition-all duration-300">
+                  <span className="text-xs font-bold text-orange-200">10.5+ Yrs</span>
+                </div>
+                
+                {/* Bottom Right Badge - Projects - Darkened */}
+                <div className="absolute -bottom-3 -right-3 px-2.5 py-1.5 rounded-lg bg-gradient-to-br from-green-600/50 to-green-700/50 border border-green-600/60 backdrop-blur-sm shadow-xl animate-bounce-subtle hover:scale-110 transition-all duration-300" style={{ animationDelay: '0.3s' }}>
+                  <span className="text-xs font-bold text-green-200">15+ Proj</span>
+                </div>
+              </div>
+            )}
+
+            {/* Social Links */}
+            <div className="w-full lg:w-auto">
+              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 text-center lg:text-right">
+                Connect With Me
+              </h3>
+              <SocialLinks 
+                socialLinks={socialLinks} 
+                email={personalInfo.email}
+                size="lg"
+              />
+            </div>
+
+            {/* Statistics Section - Below Image and Social Links */}
+            <div className="w-full lg:w-auto mt-2">
+              <div className="grid grid-cols-2 gap-3 max-w-xs lg:max-w-none">
+                <div className="text-center px-2.5 py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+                  <div className="text-lg md:text-xl font-bold text-blue-400 mb-0.5">
+                    {yearsExperience}+
+                  </div>
+                  <div className="text-[10px] md:text-xs text-gray-300 font-medium">
+                    Years Experience
+                  </div>
+                </div>
+                <div className="text-center px-2.5 py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+                  <div className="text-lg md:text-xl font-bold text-indigo-400 mb-0.5">
+                    {topCompanies}
+                  </div>
+                  <div className="text-[10px] md:text-xs text-gray-300 font-medium">
+                    Top Companies
+                  </div>
+                </div>
+                <div className="text-center px-2.5 py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+                  <div className="text-lg md:text-xl font-bold text-green-400 mb-0.5">
+                    {projectsDelivered}+
+                  </div>
+                  <div className="text-[10px] md:text-xs text-gray-300 font-medium">
+                    Projects Delivered
+                  </div>
+                </div>
+                <div className="text-center px-2.5 py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+                  <div className="text-lg md:text-xl font-bold text-purple-400 mb-0.5">
+                    {leadershipYears}
+                  </div>
+                  <div className="text-[10px] md:text-xs text-gray-300 font-medium">
+                    Years Leadership
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator - Centered */}
-        <div className="flex justify-center mt-12 animate-bounce">
-          <a href="#experience" className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-tech-800/80 backdrop-blur-sm text-cyan-400 hover:text-cyan-300 hover:bg-tech-700/80 transition-all duration-300 shadow-glow hover:shadow-glow-lg hover:scale-110 border border-cyan-500/30">
-            <ChevronDown className="h-6 w-6" />
+        {/* Scroll Indicator */}
+        <div className="flex justify-center mt-12 animate-bounce-subtle">
+          <a 
+            href="#experience" 
+            className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 text-gray-200 hover:text-blue-400 hover:border-blue-500/50 transition-all duration-200"
+            aria-label="Scroll to experience section"
+          >
+            <ChevronDown className="h-5 w-5" />
           </a>
         </div>
       </div>

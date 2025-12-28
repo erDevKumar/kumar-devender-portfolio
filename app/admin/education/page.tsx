@@ -103,7 +103,7 @@ export default function EducationPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold gradient-text-tech mb-2">Education</h1>
-          <p className="text-gray-400">Manage your education entries</p>
+          <p className="text-gray-200">Manage your education entries</p>
         </div>
         <button
           onClick={handleAdd}
@@ -229,8 +229,8 @@ export default function EducationPage() {
             ) : (
               <div className="text-gray-300">
                 <p className="font-semibold">{edu.degree}</p>
-                <p className="text-sm text-gray-400">{edu.institution}</p>
-                <p className="text-sm text-gray-400 mt-2">{edu.duration}</p>
+                <p className="text-sm text-gray-200">{edu.institution}</p>
+                <p className="text-sm text-gray-200 mt-2">{edu.duration}</p>
               </div>
             )}
           </div>

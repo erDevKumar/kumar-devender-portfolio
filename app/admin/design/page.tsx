@@ -1,85 +1,152 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Save, Palette } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Save, Palette, RotateCcw, Eye } from 'lucide-react';
 
 interface DesignSettings {
-  primaryColor: string;
-  secondaryColor: string;
-  accentColor: string;
-  backgroundColor: string;
-  textColor: string;
+  // Colors
+  primary: string;
+  secondary: string;
+  accent: string;
+  success: string;
+  warning: string;
+  error: string;
+  
+  // Background
+  bgPrimary: string;
+  bgSecondary: string;
+  
+  // Text
+  textPrimary: string;
+  textSecondary: string;
+  
+  // Font
   fontFamily: string;
 }
 
+const defaultSettings: DesignSettings = {
+  primary: '#2563eb',
+  secondary: '#64748b',
+  accent: '#0ea5e9',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  bgPrimary: '#111827',
+  bgSecondary: '#1f2937',
+  textPrimary: '#ffffff',
+  textSecondary: '#d1d5db',
+  fontFamily: 'Inter',
+};
+
+const fontOptions = [
+  { value: 'Inter', label: 'Inter' },
+  { value: 'Roboto', label: 'Roboto' },
+  { value: 'Open Sans', label: 'Open Sans' },
+  { value: 'Lato', label: 'Lato' },
+  { value: 'Montserrat', label: 'Montserrat' },
+  { value: 'Poppins', label: 'Poppins' },
+  { value: 'Source Sans Pro', label: 'Source Sans Pro' },
+  { value: 'system-ui', label: 'System UI' },
+];
+
 export default function DesignPage() {
-  const [settings, setSettings] = useState<DesignSettings>({
-    primaryColor: '#0ea5e9',
-    secondaryColor: '#6366f1',
-    accentColor: '#00f0ff',
-    backgroundColor: '#0f172a',
-    textColor: '#f1f5f9',
-    fontFamily: 'system-ui',
-  });
+  const [settings, setSettings] = useState<DesignSettings>(defaultSettings);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     loadSettings();
   }, []);
 
   const loadSettings = () => {
-    const saved = localStorage.getItem('design_settings');
-    if (saved) {
-      try {
-        setSettings(JSON.parse(saved));
-      } catch (error) {
-        console.error('Failed to load design settings:', error);
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('design_settings');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setSettings({ ...defaultSettings, ...parsed });
+        } catch (e) {
+          console.error('Failed to load design settings:', e);
+        }
       }
     }
   };
 
-  const handleChange = (field: keyof DesignSettings, value: string) => {
-    setSettings((prev) => ({ ...prev, [field]: value }));
+  const applyPreviewStyles = useCallback(() => {
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement;
+      root.style.setProperty('--color-primary', settings.primary);
+      root.style.setProperty('--color-secondary', settings.secondary);
+      root.style.setProperty('--color-accent', settings.accent);
+      root.style.setProperty('--color-success', settings.success);
+      root.style.setProperty('--color-warning', settings.warning);
+      root.style.setProperty('--color-error', settings.error);
+      root.style.setProperty('--color-bg-primary', settings.bgPrimary);
+      root.style.setProperty('--color-bg-secondary', settings.bgSecondary);
+      root.style.setProperty('--color-text-primary', settings.textPrimary);
+      root.style.setProperty('--color-text-secondary', settings.textSecondary);
+      root.style.fontFamily = settings.fontFamily;
+    }
+  }, [settings]);
+
+  useEffect(() => {
+    applyPreviewStyles();
+  }, [applyPreviewStyles]);
+
+  const handleChange = (key: keyof DesignSettings, value: string) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleReset = () => {
+    if (confirm('Are you sure you want to reset all design settings to default?')) {
+      setSettings(defaultSettings);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('design_settings');
+      }
+      setMessage({ type: 'success', text: 'Design settings reset to default' });
+    }
+  };
+
+  const handleSave = () => {
     setSaving(true);
     setMessage(null);
 
     try {
-      // Save to localStorage for now
-      localStorage.setItem('design_settings', JSON.stringify(settings));
-      
-      // In production, you might want to save this to a config file or database
-      setMessage({ type: 'success', text: 'Design settings saved! Note: These are stored locally. For production, integrate with your backend.' });
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('design_settings', JSON.stringify(settings));
+        setMessage({ type: 'success', text: 'Design settings saved successfully! Note: These are preview settings. To apply permanently, you may need to update your CSS variables.' });
+      }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to save settings' });
+      setMessage({ type: 'error', text: 'Failed to save design settings' });
     } finally {
       setSaving(false);
     }
   };
 
-  const applyPreview = () => {
-    const root = document.documentElement;
-    root.style.setProperty('--primary-color', settings.primaryColor);
-    root.style.setProperty('--secondary-color', settings.secondaryColor);
-    root.style.setProperty('--accent-color', settings.accentColor);
-    root.style.setProperty('--bg-color', settings.backgroundColor);
-    root.style.setProperty('--text-color', settings.textColor);
-    root.style.setProperty('--font-family', settings.fontFamily);
-  };
-
-  useEffect(() => {
-    applyPreview();
-  }, [settings]);
-
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-4xl font-bold gradient-text-tech mb-2">Design Customization</h1>
-        <p className="text-gray-400">Customize colors, fonts, and design elements</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-bold text-white mb-2">Design Customization</h1>
+          <p className="text-gray-200">Customize colors, backgrounds, and typography</p>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowPreview(!showPreview)}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 text-gray-200 rounded-lg hover:border-blue-500/50 transition-all"
+          >
+            <Eye className="w-5 h-5" />
+            {showPreview ? 'Hide' : 'Show'} Preview
+          </button>
+          <button
+            onClick={handleReset}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 text-gray-200 rounded-lg hover:border-orange-500/50 transition-all"
+          >
+            <RotateCcw className="w-5 h-5" />
+            Reset
+          </button>
+        </div>
       </div>
 
       {message && (
@@ -94,185 +161,314 @@ export default function DesignPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="glass-card-dark rounded-xl p-6 border border-cyan-500/20 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Primary Color */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Primary Color</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={settings.primaryColor}
-                onChange={(e) => handleChange('primaryColor', e.target.value)}
-                className="w-16 h-16 rounded-lg border border-cyan-500/30 cursor-pointer"
-              />
-              <input
-                type="text"
-                value={settings.primaryColor}
-                onChange={(e) => handleChange('primaryColor', e.target.value)}
-                className="flex-1 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg text-gray-100"
-                placeholder="#0ea5e9"
-              />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Settings Panel */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Color Settings */}
+          <div className="rounded-xl p-6 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-yellow-500/20 rounded-lg border border-yellow-500/30">
+                <Palette className="w-5 h-5 text-yellow-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">Colors</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Primary Color</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.primary}
+                    onChange={(e) => handleChange('primary', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.primary}
+                    onChange={(e) => handleChange('primary', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Secondary Color</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.secondary}
+                    onChange={(e) => handleChange('secondary', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.secondary}
+                    onChange={(e) => handleChange('secondary', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Accent Color</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.accent}
+                    onChange={(e) => handleChange('accent', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.accent}
+                    onChange={(e) => handleChange('accent', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Success Color</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.success}
+                    onChange={(e) => handleChange('success', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.success}
+                    onChange={(e) => handleChange('success', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Warning Color</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.warning}
+                    onChange={(e) => handleChange('warning', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.warning}
+                    onChange={(e) => handleChange('warning', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Error Color</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.error}
+                    onChange={(e) => handleChange('error', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.error}
+                    onChange={(e) => handleChange('error', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Secondary Color */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Secondary Color</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={settings.secondaryColor}
-                onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                className="w-16 h-16 rounded-lg border border-cyan-500/30 cursor-pointer"
-              />
-              <input
-                type="text"
-                value={settings.secondaryColor}
-                onChange={(e) => handleChange('secondaryColor', e.target.value)}
-                className="flex-1 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg text-gray-100"
-                placeholder="#6366f1"
-              />
+          {/* Background Settings */}
+          <div className="rounded-xl p-6 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+            <h2 className="text-2xl font-bold text-white mb-6">Background Colors</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Primary Background</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.bgPrimary}
+                    onChange={(e) => handleChange('bgPrimary', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.bgPrimary}
+                    onChange={(e) => handleChange('bgPrimary', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Secondary Background</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.bgSecondary}
+                    onChange={(e) => handleChange('bgSecondary', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.bgSecondary}
+                    onChange={(e) => handleChange('bgSecondary', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Accent Color */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Accent Color</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={settings.accentColor}
-                onChange={(e) => handleChange('accentColor', e.target.value)}
-                className="w-16 h-16 rounded-lg border border-cyan-500/30 cursor-pointer"
-              />
-              <input
-                type="text"
-                value={settings.accentColor}
-                onChange={(e) => handleChange('accentColor', e.target.value)}
-                className="flex-1 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg text-gray-100"
-                placeholder="#00f0ff"
-              />
+          {/* Text Settings */}
+          <div className="rounded-xl p-6 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+            <h2 className="text-2xl font-bold text-white mb-6">Text Colors</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Primary Text</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.textPrimary}
+                    onChange={(e) => handleChange('textPrimary', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.textPrimary}
+                    onChange={(e) => handleChange('textPrimary', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Secondary Text</label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    value={settings.textSecondary}
+                    onChange={(e) => handleChange('textSecondary', e.target.value)}
+                    className="w-16 h-10 rounded-lg border border-gray-700/50 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={settings.textSecondary}
+                    onChange={(e) => handleChange('textSecondary', e.target.value)}
+                    className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Background Color */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Background Color</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={settings.backgroundColor}
-                onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                className="w-16 h-16 rounded-lg border border-cyan-500/30 cursor-pointer"
-              />
-              <input
-                type="text"
-                value={settings.backgroundColor}
-                onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                className="flex-1 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg text-gray-100"
-                placeholder="#0f172a"
-              />
+          {/* Typography Settings */}
+          <div className="rounded-xl p-6 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
+            <h2 className="text-2xl font-bold text-white mb-6">Typography</h2>
+            <div>
+              <label className="block text-sm font-medium text-gray-200 mb-2">Font Family</label>
+              <select
+                value={settings.fontFamily}
+                onChange={(e) => handleChange('fontFamily', e.target.value)}
+                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {fontOptions.map((font) => (
+                  <option key={font.value} value={font.value}>
+                    {font.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Text Color */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Text Color</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={settings.textColor}
-                onChange={(e) => handleChange('textColor', e.target.value)}
-                className="w-16 h-16 rounded-lg border border-cyan-500/30 cursor-pointer"
-              />
-              <input
-                type="text"
-                value={settings.textColor}
-                onChange={(e) => handleChange('textColor', e.target.value)}
-                className="flex-1 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg text-gray-100"
-                placeholder="#f1f5f9"
-              />
-            </div>
-          </div>
-
-          {/* Font Family */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Font Family</label>
-            <select
-              value={settings.fontFamily}
-              onChange={(e) => handleChange('fontFamily', e.target.value)}
-              className="w-full px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg text-gray-100"
+          {/* Save Button */}
+          <div className="flex justify-end">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-lg hover:from-blue-500 hover:to-blue-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25"
             >
-              <option value="system-ui">System UI</option>
-              <option value="Inter">Inter</option>
-              <option value="Roboto">Roboto</option>
-              <option value="Open Sans">Open Sans</option>
-              <option value="Lato">Lato</option>
-              <option value="Montserrat">Montserrat</option>
-              <option value="Poppins">Poppins</option>
-            </select>
+              <Save className="w-5 h-5" />
+              {saving ? 'Saving...' : 'Save Design Settings'}
+            </button>
           </div>
         </div>
 
-        {/* Preview Section */}
-        <div className="border-t border-cyan-500/20 pt-6">
-          <h3 className="text-lg font-semibold text-gray-200 mb-4">Preview</h3>
-          <div className="space-y-4">
-            <div
-              className="p-6 rounded-lg"
-              style={{
-                backgroundColor: settings.backgroundColor,
-                color: settings.textColor,
-                fontFamily: settings.fontFamily,
-              }}
-            >
-              <h4
-                className="text-2xl font-bold mb-2"
-                style={{ color: settings.primaryColor }}
-              >
-                Sample Heading
-              </h4>
-              <p className="mb-4">This is a preview of how your design will look.</p>
-              <button
-                type="button"
-                className="px-4 py-2 rounded-lg text-white"
-                style={{ backgroundColor: settings.primaryColor }}
-              >
-                Primary Button
-              </button>
-              <button
-                type="button"
-                className="px-4 py-2 rounded-lg text-white ml-2"
-                style={{ backgroundColor: settings.secondaryColor }}
-              >
-                Secondary Button
-              </button>
+        {/* Preview Panel */}
+        {showPreview && (
+          <div className="lg:col-span-1">
+            <div className="rounded-xl p-6 bg-gray-800/40 backdrop-blur-sm border border-gray-700/50 sticky top-8">
+              <h2 className="text-xl font-bold text-white mb-4">Live Preview</h2>
+              <div className="space-y-4">
+                <div className="p-4 rounded-lg" style={{ backgroundColor: settings.bgPrimary }}>
+                  <h3 className="text-lg font-semibold mb-2" style={{ color: settings.textPrimary }}>
+                    Sample Heading
+                  </h3>
+                  <p className="text-sm" style={{ color: settings.textSecondary }}>
+                    This is a sample paragraph showing how your text colors will look.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    className="px-4 py-2 rounded-lg text-white text-sm font-medium"
+                    style={{ backgroundColor: settings.primary }}
+                  >
+                    Primary
+                  </button>
+                  <button
+                    className="px-4 py-2 rounded-lg text-white text-sm font-medium"
+                    style={{ backgroundColor: settings.secondary }}
+                  >
+                    Secondary
+                  </button>
+                  <button
+                    className="px-4 py-2 rounded-lg text-white text-sm font-medium"
+                    style={{ backgroundColor: settings.accent }}
+                  >
+                    Accent
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="p-3 rounded-lg text-sm" style={{ backgroundColor: settings.success + '20', color: settings.success }}>
+                    Success message
+                  </div>
+                  <div className="p-3 rounded-lg text-sm" style={{ backgroundColor: settings.warning + '20', color: settings.warning }}>
+                    Warning message
+                  </div>
+                  <div className="p-3 rounded-lg text-sm" style={{ backgroundColor: settings.error + '20', color: settings.error }}>
+                    Error message
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-lg border" style={{ backgroundColor: settings.bgSecondary, borderColor: settings.secondary + '50' }}>
+                  <p className="text-sm" style={{ color: settings.textPrimary, fontFamily: settings.fontFamily }}>
+                    Font: {settings.fontFamily}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Info Note */}
-        <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
-          <p className="text-sm text-gray-300">
-            <strong className="text-blue-400">Note:</strong> Design customization is currently saved to localStorage.
-            For production use, integrate these settings with your backend or configuration file.
-            You may need to update your Tailwind config or CSS variables to apply these changes globally.
+      {/* Info Alert */}
+      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 flex items-start gap-3">
+        <Palette className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+        <div className="text-sm text-gray-200">
+          <p className="font-semibold text-blue-400 mb-1">Note:</p>
+          <p className="text-gray-200">
+            Design settings are saved to your browser&apos;s localStorage for preview purposes. 
+            To apply these changes permanently to your portfolio, you&apos;ll need to update the CSS variables in your global stylesheet (globals.css).
           </p>
         </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-end pt-4">
-          <button
-            type="submit"
-            disabled={saving}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:shadow-glow transition-all disabled:opacity-50"
-          >
-            <Save className="w-5 h-5" />
-            {saving ? 'Saving...' : 'Save Design Settings'}
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

@@ -102,7 +102,7 @@ export default function SkillsPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold gradient-text-tech mb-2">Skills</h1>
-          <p className="text-gray-400">Manage your skills and proficiencies</p>
+          <p className="text-gray-200">Manage your skills and proficiencies</p>
         </div>
         <button
           onClick={handleAdd}
@@ -185,7 +185,7 @@ export default function SkillsPage() {
                       <option value="">None</option>
                       {proficiencies.map((prof) => (
                         <option key={prof} value={prof}>
-                          {prof.charAt(0).toUpperCase() + prof.slice(1)}
+                          {prof ? prof.charAt(0).toUpperCase() + prof.slice(1) : ''}
                         </option>
                       ))}
                     </select>

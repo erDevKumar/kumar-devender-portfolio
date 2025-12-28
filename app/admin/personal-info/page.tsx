@@ -118,7 +118,7 @@ export default function PersonalInfoPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-4xl font-bold gradient-text-tech mb-2">Personal Information</h1>
-        <p className="text-gray-400">Update your personal details and profile</p>
+        <p className="text-gray-200">Update your personal details and profile</p>
       </div>
 
       {message && (
@@ -158,7 +158,7 @@ export default function PersonalInfoPage() {
                   className="hidden"
                 />
               </label>
-              <p className="text-xs text-gray-500 mt-2">Current: {formData.profileImage || 'None'}</p>
+              <p className="text-xs text-gray-300 mt-2">Current: {formData.profileImage || 'None'}</p>
             </div>
           </div>
         </div>

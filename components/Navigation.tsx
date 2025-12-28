@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
 import { NAV_ITEMS } from '@/utils/constants';
 
 export default function Navigation() {
@@ -18,7 +18,7 @@ export default function Navigation() {
     e.preventDefault();
     const element = document.querySelector(href);
     if (element) {
-      const yOffset = -80; // Account for fixed navigation
+      const yOffset = -80;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
@@ -26,60 +26,83 @@ export default function Navigation() {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled 
-        ? 'glass-card-dark shadow-tech-lg border-b border-cyan-500/30 backdrop-blur-xl' 
+        ? 'bg-[#111827]/95 backdrop-blur-md shadow-lg border-b border-gray-700/50' 
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo/Initials */}
           <a 
             href="#home" 
             onClick={(e) => handleNavClick(e, '#home')} 
-            className="text-2xl font-extrabold gradient-text-tech hover:scale-105 transition-all duration-300 tracking-tight focus-visible-ring"
+            className="text-lg font-bold text-white hover:text-blue-400 transition-colors duration-200"
           >
-            Portfolio
+            DK
           </a>
-          <div className="hidden md:flex items-center space-x-1">
+          
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center space-x-8">
             {NAV_ITEMS.map((item) => (
               <a 
                 key={item.name} 
                 href={item.href} 
                 onClick={(e) => handleNavClick(e, item.href)} 
-                className="relative px-4 py-2 text-gray-300 hover:text-cyan-400 transition-all duration-300 font-semibold text-sm rounded-xl group focus-visible-ring"
+                className="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200 relative group"
               >
-                <span className="relative z-10">{item.name}</span>
-                <span className="absolute inset-0 bg-cyan-500/10 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full transition-all duration-300 group-hover:w-3/4"></span>
+                {item.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
           </div>
-          <button 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-            className="md:hidden text-gray-300 hover:text-cyan-400 transition-all duration-300 p-2.5 rounded-xl hover:bg-cyan-500/10 active:scale-95 focus-visible-ring" 
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+
+          {/* Resume Button & Mobile Menu */}
+          <div className="flex items-center gap-4">
+            <a
+              href="/resume.pdf"
+              download
+              className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold rounded-lg hover:from-purple-500 hover:to-purple-400 transition-all duration-200 shadow-lg shadow-purple-500/25"
+            >
+              <Download className="w-4 h-4" />
+              Resume
+            </a>
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+              className="md:hidden text-gray-300 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-800/50" 
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
       </div>
+      
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden glass-card-dark border-t border-cyan-500/30 backdrop-blur-xl animate-slide-up">
-          <div className="px-4 pt-2 pb-6 space-y-1">
+        <div className="md:hidden bg-[#111827]/98 backdrop-blur-md border-t border-gray-700/50 shadow-xl">
+          <div className="px-4 py-4 space-y-1">
             {NAV_ITEMS.map((item) => (
               <a 
                 key={item.name} 
                 href={item.href} 
                 onClick={(e) => handleNavClick(e, item.href)} 
-                className="block px-4 py-3 text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400 rounded-xl transition-all duration-300 font-semibold text-sm active:scale-95 focus-visible-ring"
+                className="block px-4 py-3 text-sm font-medium text-gray-300 hover:bg-gray-800/50 hover:text-white rounded-lg transition-colors duration-200"
               >
                 {item.name}
               </a>
             ))}
+            <a
+              href="/resume.pdf"
+              download
+              className="flex items-center gap-2 px-4 py-3 mt-2 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold rounded-lg"
+            >
+              <Download className="w-4 h-4" />
+              Resume
+            </a>
           </div>
         </div>
       )}
     </nav>
   );
 }
-

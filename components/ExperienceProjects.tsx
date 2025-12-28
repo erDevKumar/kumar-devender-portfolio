@@ -2,10 +2,8 @@
 
 import { useMemo } from 'react';
 import { WorkExperience, Project } from '@/types/portfolio';
-import { Briefcase, Code } from 'lucide-react';
+import { Briefcase, Code, Sparkles } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { useAnimatedGradient } from '@/hooks/useAnimatedGradient';
-import AnimatedBackground from '@/components/AnimatedBackground';
 import ExperienceItem from './ExperienceItem';
 
 interface ExperienceProjectsProps {
@@ -33,7 +31,6 @@ function getProjectsForCompany(company: string, projects: Project[], allCompanie
 
 export default function ExperienceProjects({ experience, projects }: ExperienceProjectsProps) {
   const { ref } = useScrollAnimation();
-  const { time, getGradient } = useAnimatedGradient(120, 10);
 
   // Get all company names
   const companyNames = useMemo(() => experience.map(exp => exp.company), [experience]);
@@ -59,33 +56,31 @@ export default function ExperienceProjects({ experience, projects }: ExperienceP
   }, [experience, projects, companyNames]);
 
   return (
-    <section id="experience" ref={ref} className="section-padding relative overflow-hidden">
-      <AnimatedBackground time={time} hue={(time * 10 + 200) % 360} />
+    <section id="experience" ref={ref} className="section-padding bg-[#111827] relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500 rounded-full blur-3xl"></div>
+      </div>
+
       <div className="max-w-7xl mx-auto container-padding relative z-10">
-        {/* Combined Header */}
-        <div className="mb-12 md:mb-16 text-center">
-          <div className="flex items-center justify-center gap-4 mb-6 flex-wrap">
-            <div className="flex items-center gap-4">
-              <div className="bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 p-4 rounded-3xl shadow-glow">
-                <Briefcase className="h-8 w-8 md:h-10 md:w-10 text-white" />
-              </div>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text-tech">Experience</h2>
+        {/* Enhanced Header */}
+        <div className="mb-16 text-center">
+          <div className="inline-flex items-center justify-center gap-3 mb-6">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30">
+              <Briefcase className="h-8 w-8 text-blue-400" />
             </div>
-            <div className="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-cyan-400/50 to-transparent"></div>
-            <div className="flex items-center gap-4">
-              <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 p-4 rounded-3xl shadow-glow">
-                <Code className="h-8 w-8 md:h-10 md:w-10 text-white" />
-              </div>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold gradient-text-tech">Projects</h2>
-            </div>
+            <h2 className="text-4xl lg:text-5xl font-extrabold text-white">
+              Work Experience
+            </h2>
           </div>
-          <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto text-balance">
-            Professional journey and innovative projects
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            Professional journey and key achievements across {experience.length} {experience.length === 1 ? 'role' : 'roles'}
           </p>
         </div>
 
-        {/* Single Column Layout - Experience with nested Projects - Improved Spacing */}
-        <div className="max-w-5xl mx-auto space-y-10">
+        {/* Professional Experience List */}
+        <div className="max-w-5xl mx-auto space-y-6">
           {experience.map((exp, index) => {
             const companyProjects = projectsByCompany[exp.company] || [];
             return (
@@ -100,36 +95,50 @@ export default function ExperienceProjects({ experience, projects }: ExperienceP
           
           {/* Show ungrouped projects if any */}
           {projectsByCompany['Other'] && projectsByCompany['Other'].length > 0 && (
-            <div className="mt-12 pt-8 border-t border-cyan-500/30">
-              <h3 className="text-2xl md:text-3xl font-bold gradient-text-tech mb-6 flex items-center gap-3">
-                <div className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 p-3 rounded-2xl shadow-glow">
-                  <Code className="h-6 w-6 text-white" />
+            <div className="mt-12 pt-8 border-t border-gray-700/50">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30">
+                  <img src="/icons/ic_projects.svg" alt="Projects" className="h-5 w-5" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(96%) saturate(1234%) hue-rotate(199deg) brightness(101%) contrast(101%)' }} />
                 </div>
-                Other Projects
-              </h3>
-              <div className="space-y-6">
+                <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                  Other Projects
+                </h3>
+                <span className="px-3 py-1 rounded-lg text-sm font-semibold bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>{projectsByCompany['Other'].length}</span>
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {projectsByCompany['Other'].map((project, idx) => (
-                  <div key={`other-proj-${idx}`} className="ml-8 md:ml-12">
-                    <div className="glass-card-dark rounded-3xl p-6 md:p-8 hover:shadow-tech-lg transition-all duration-500 border border-cyan-500/30 shadow-tech card-hover code-border">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="bg-gradient-to-br from-cyan-500 to-blue-600 p-3 rounded-2xl shadow-glow flex-shrink-0">
-                          <Code className="h-5 w-5 md:h-6 md:w-6 text-white" />
-                        </div>
-                        <h4 className="text-lg md:text-xl font-bold text-gray-100">{project.name}</h4>
+                  <div 
+                    key={`other-proj-${idx}`} 
+                    className="group rounded-xl p-6 bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/10"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30 group-hover:scale-110 transition-transform duration-200">
+                        <img src="/icons/ic_projects.svg" alt="Projects" className="h-5 w-5" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(96%) saturate(1234%) hue-rotate(199deg) brightness(101%) contrast(101%)' }} />
                       </div>
-                      <p className="text-sm md:text-base text-gray-300/90 mb-6 leading-relaxed">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2.5">
-                        {project.technologies.map((tech, techIdx) => (
-                          <span 
-                            key={techIdx} 
-                            className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 font-semibold text-xs md:text-sm px-4 py-2 rounded-full border border-cyan-500/30 shadow-soft hover:shadow-glow hover:scale-105 transition-all duration-300"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
+                      <h4 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
+                        {project.name}
+                      </h4>
+                    </div>
+                    <p className="text-sm text-gray-300 mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.slice(0, 5).map((tech, techIdx) => (
+                        <span 
+                          key={techIdx} 
+                          className="px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 5 && (
+                        <span className="px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-700/50 text-gray-400 border border-gray-600/50">
+                          +{project.technologies.length - 5}
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -141,4 +150,3 @@ export default function ExperienceProjects({ experience, projects }: ExperienceP
     </section>
   );
 }
-

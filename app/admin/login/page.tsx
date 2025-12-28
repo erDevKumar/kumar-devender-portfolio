@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, User } from 'lucide-react';
+import { Lock, User, ArrowRight, Shield } from 'lucide-react';
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
@@ -22,7 +22,9 @@ export default function AdminLogin() {
     if (password === ADMIN_PASSWORD) {
       localStorage.setItem('admin_auth_token', 'authenticated');
       // Use window.location for a full page reload to ensure auth state is set
-      window.location.href = '/admin';
+      setTimeout(() => {
+        window.location.href = '/admin';
+      }, 300);
     } else {
       setError('Invalid password');
       setLoading(false);
@@ -30,59 +32,80 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-tech-950 via-tech-900 to-tech-950">
-      <div className="glass-card-dark rounded-3xl p-8 w-full max-w-md border border-cyan-500/30 shadow-tech-lg">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 mb-4">
-            <Lock className="w-8 h-8 text-white" />
+    <div className="min-h-screen flex items-center justify-center bg-[#111827] relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(37,99,235,0.1),transparent_50%)] animate-pulse-slow"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(124,58,237,0.08),transparent_50%)] animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
+      
+      <div className="relative z-10 w-full max-w-md mx-auto px-4">
+        <div className="bg-gray-800/60 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-gray-700/50 animate-scale-in">
+          {/* Header */}
+          <div className="text-center mb-8 animate-fade-in-down">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 mb-4 shadow-lg shadow-blue-500/25 animate-scale-in stagger-1">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">Admin Login</h1>
+            <p className="text-gray-300">Enter your password to access the admin panel</p>
           </div>
-          <h1 className="text-3xl font-bold gradient-text-tech mb-2">Admin Login</h1>
-          <p className="text-gray-400">Enter your password to access the admin panel</p>
-        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-              Password
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-gray-400" />
+          <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in-up stagger-2">
+            <div>
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-200 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-300" />
+                </div>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-gray-800/40 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  placeholder="Enter admin password"
+                  required
+                  autoFocus
+                />
               </div>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-tech-800/50 border border-cyan-500/30 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                placeholder="Enter admin password"
-                required
-                autoFocus
-              />
+            </div>
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-sm animate-fade-in-down flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:from-blue-500 hover:to-indigo-500 transition-all duration-200 shadow-lg shadow-blue-500/25 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin-slow"></div>
+                  <span>Logging in...</span>
+                </>
+              ) : (
+                <>
+                  <span>Login</span>
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-gray-300 animate-fade-in-up stagger-3">
+            <div className="bg-gray-800/30 rounded-lg p-3 border border-gray-700/50">
+              <p className="font-medium text-gray-200">Default password: <code className="bg-gray-800/50 px-2 py-1 rounded text-blue-400">admin123</code></p>
+              <p className="text-xs mt-2 text-gray-300">⚠️ Change this in production!</p>
             </div>
           </div>
-
-          {error && (
-            <div className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 text-white font-semibold py-3 rounded-lg hover:shadow-glow transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Default password: admin123</p>
-          <p className="text-xs mt-2">Change this in production!</p>
         </div>
       </div>
     </div>
   );
 }
-

@@ -192,7 +192,7 @@ export default function PortfolioEditor() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold gradient-text-tech mb-2">Portfolio Editor</h1>
-          <p className="text-gray-400">Edit all your portfolio content in one place</p>
+          <p className="text-gray-200">Edit all your portfolio content in one place</p>
         </div>
         <button
           onClick={handleSave}
@@ -233,7 +233,7 @@ export default function PortfolioEditor() {
           <div className="p-6 space-y-4 border-t border-cyan-500/20">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Name *</label>
+                <label className="block text-sm font-medium text-gray-200 mb-2">Name *</label>
                 <input
                   type="text"
                   value={portfolioData.personalInfo.name}
@@ -302,7 +302,7 @@ export default function PortfolioEditor() {
                 <label className="cursor-pointer">
                   <div className="flex items-center gap-2 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg hover:bg-tech-800 transition-all">
                     <Upload className="w-4 h-4 text-cyan-400" />
-                    <span className="text-sm text-gray-300">Upload Image</span>
+                    <span className="text-sm text-gray-200">Upload Image</span>
                   </div>
                   <input
                     type="file"
@@ -435,7 +435,7 @@ export default function PortfolioEditor() {
                       <label className="cursor-pointer">
                         <div className="flex items-center gap-2 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg hover:bg-tech-800 transition-all">
                           <Upload className="w-4 h-4 text-cyan-400" />
-                          <span className="text-sm text-gray-300">
+                          <span className="text-sm text-gray-200">
                             {exp.companyInfo?.logo ? 'Change Logo' : 'Upload Logo'}
                           </span>
                         </div>
@@ -653,7 +653,7 @@ export default function PortfolioEditor() {
                         </option>
                       ))}
                     </select>
-                    <p className="text-xs text-gray-400 mt-1">Link this project to a company from your work experience</p>
+                    <p className="text-xs text-gray-300 mt-1">Link this project to a company from your work experience</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Description *</label>
@@ -691,7 +691,7 @@ export default function PortfolioEditor() {
                       <label className="cursor-pointer">
                         <div className="flex items-center gap-2 px-4 py-2 bg-tech-800/50 border border-cyan-500/30 rounded-lg hover:bg-tech-800 transition-all">
                           <Upload className="w-4 h-4 text-cyan-400" />
-                          <span className="text-sm text-gray-300">
+                          <span className="text-sm text-gray-200">
                             {project.image ? 'Change Image' : 'Upload Image'}
                           </span>
                         </div>
