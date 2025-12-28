@@ -89,9 +89,9 @@ The admin module provides a comprehensive interface to manage all content and de
    - Or deploy the admin separately from the main site
 
 2. **Password Security**: 
-   - Change the default password in production
-   - Consider using environment variables: `NEXT_PUBLIC_ADMIN_PASSWORD`
-   - Or implement proper authentication (Firebase Auth, NextAuth, etc.)
+   - Password is stored in Firebase Remote Config (parameter: `admin_password`)
+   - Can be updated from Firebase Console without redeployment
+   - See `ADMIN_AUTH_README.md` for setup instructions
 
 3. **File Permissions**: 
    - Ensure the server has write permissions to `data/` and `public/` directories
