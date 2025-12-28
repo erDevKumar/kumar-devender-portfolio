@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXT_PUBLIC_JWT_SECRET || 'your-secret-key-change-in-production';
-
 // Simple token verification (in production, use proper JWT library)
 function verifyToken(token: string): { admin: boolean; timestamp: number } | null {
   try {

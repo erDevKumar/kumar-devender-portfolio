@@ -18,36 +18,43 @@ export default function AdminDashboard() {
   });
 
   useEffect(() => {
-    // Load current portfolio data - for static sites, use default data
+    // Load current portfolio data - for static sites, use default data immediately
     const loadData = async () => {
+      // Set default data immediately for static sites
+      setData(portfolioData);
+      setStats({
+        experience: portfolioData.experience.length,
+        education: portfolioData.education.length,
+        skills: portfolioData.skills.length,
+        projects: portfolioData.projects.length,
+        socialLinks: portfolioData.socialLinks.length,
+      });
+      setLoading(false);
+
+      // Try API route in background (for development only)
       try {
-        // Try API route first (for development)
-        const response = await fetch('/api/portfolio');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+        
+        const response = await fetch('/api/portfolio', {
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        
         if (response.ok) {
-          const portfolioData = await response.json();
-          setData(portfolioData);
+          const apiData = await response.json();
+          setData(apiData);
           setStats({
-            experience: portfolioData.experience?.length || 0,
-            education: portfolioData.education?.length || 0,
-            skills: portfolioData.skills?.length || 0,
-            projects: portfolioData.projects?.length || 0,
-            socialLinks: portfolioData.socialLinks?.length || 0,
+            experience: apiData.experience?.length || 0,
+            education: apiData.education?.length || 0,
+            skills: apiData.skills?.length || 0,
+            projects: apiData.projects?.length || 0,
+            socialLinks: apiData.socialLinks?.length || 0,
           });
-        } else {
-          throw new Error('API not available');
         }
       } catch (error) {
-        // Fallback to default data (for static sites)
-        setData(portfolioData);
-        setStats({
-          experience: portfolioData.experience.length,
-          education: portfolioData.education.length,
-          skills: portfolioData.skills.length,
-          projects: portfolioData.projects.length,
-          socialLinks: portfolioData.socialLinks.length,
-        });
-      } finally {
-        setLoading(false);
+        // Ignore errors - we already have default data
+        console.log('Using default portfolio data');
       }
     };
     loadData();
