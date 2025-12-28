@@ -1,7 +1,7 @@
 'use client';
 
 import { Education } from '@/types/portfolio';
-import { GraduationCap, Calendar, MapPin } from 'lucide-react';
+import { GraduationCap, Calendar, MapPin, Award } from 'lucide-react';
 import { useItemScrollAnimation } from '@/hooks/useItemScrollAnimation';
 
 interface EducationItemProps {
@@ -14,33 +14,56 @@ export default function EducationItem({ edu, index }: EducationItemProps) {
 
   return (
     <div ref={ref} className={`scroll-fade-in ${isVisible ? 'visible' : ''}`}>
-      <div className="glass-card-dark rounded-3xl p-6 md:p-8 hover:shadow-tech-lg transition-all duration-500 border border-cyan-500/30 shadow-tech card-hover code-border focus-visible-ring">
-      <div className="flex items-start gap-5 mb-6">
-        <div className="bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 p-4 rounded-3xl shadow-glow flex-shrink-0">
-          <GraduationCap className="h-7 w-7 md:h-8 md:w-8 text-white" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h4 className="text-xl md:text-2xl font-bold text-gray-100 mb-2 leading-tight">
-            {edu.degree}
-            {edu.field && <span className="text-gray-300 font-normal"> in {edu.field}</span>}
-          </h4>
-          <h5 className="text-lg md:text-xl font-semibold gradient-text-tech mb-4">{edu.institution}</h5>
-        </div>
-      </div>
-      <div className="flex flex-wrap items-center gap-3 text-sm md:text-base">
-        <div className="flex items-center gap-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 px-4 py-2.5 rounded-full border border-cyan-500/30 shadow-soft">
-          <Calendar className="h-4 w-4 md:h-5 md:w-5 text-cyan-400" />
-          <span className="font-semibold text-gray-200">{edu.duration}</span>
-        </div>
-        {edu.location && (
-          <div className="flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 px-4 py-2.5 rounded-full border border-blue-500/30 shadow-soft">
-            <MapPin className="h-4 w-4 md:h-5 md:w-5 text-blue-400" />
-            <span className="font-semibold text-gray-200">{edu.location}</span>
+      <div className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 hover:border-indigo-500/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-indigo-500/10">
+        {/* Gradient Accent Bar */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+        
+        {/* Content */}
+        <div className="p-4 sm:p-6 lg:p-8">
+          <div className="flex items-start gap-3 sm:gap-5">
+            {/* Icon */}
+            <div className="flex-shrink-0">
+              <div className="relative p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 border border-indigo-500/30 group-hover:scale-110 transition-transform duration-300">
+                <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-indigo-400" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full border-2 border-gray-800 flex items-center justify-center">
+                  <Award className="h-1.5 w-1.5 sm:h-2 sm:w-2 lg:h-2.5 lg:w-2.5 text-white" />
+                </div>
+              </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="flex-1 min-w-0">
+              <div className="mb-3 sm:mb-4">
+                <h4 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2 group-hover:text-indigo-400 transition-colors break-words">
+                  {edu.degree}
+                </h4>
+                {edu.field && (
+                  <p className="text-sm sm:text-base font-medium text-gray-300 mb-1 break-words">
+                    {edu.field}
+                  </p>
+                )}
+                <h5 className="text-base sm:text-lg font-semibold text-gray-200 flex items-center gap-2 break-words">
+                  <span>{edu.institution}</span>
+                </h5>
+              </div>
+
+              {/* Meta Information */}
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-700/50 border border-gray-600/50">
+                  <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-indigo-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm text-gray-200 font-medium whitespace-nowrap">{edu.duration}</span>
+                </div>
+                {edu.location && (
+                  <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-700/50 border border-gray-600/50">
+                    <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm text-gray-200 font-medium break-words">{edu.location}</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-    </div>
     </div>
   );
 }
-

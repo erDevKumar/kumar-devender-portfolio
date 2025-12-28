@@ -11,13 +11,27 @@ export default function Home() {
   return (
     <Loader>
       <ScrollProgress />
-      <main className="min-h-screen bg-gradient-to-br from-tech-950 via-tech-900 to-tech-950 antialiased relative overflow-hidden">
-        <div className="fixed inset-0 tech-grid opacity-20 pointer-events-none"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,165,233,0.1),transparent_50%)] pointer-events-none"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(124,58,237,0.08),transparent_50%)] pointer-events-none"></div>
+      <main className="min-h-screen bg-[#111827] antialiased relative">
+        {/* Subtle background patterns */}
+        <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, #3b82f6 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }}></div>
+        
+        {/* Gradient overlays for depth */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-blue-950/15 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 w-full h-96 bg-gradient-to-t from-purple-950/15 to-transparent"></div>
+        </div>
+
         <div className="relative z-10">
           <Navigation />
-          <Hero personalInfo={portfolioData.personalInfo} socialLinks={portfolioData.socialLinks} />
+          <Hero 
+            personalInfo={portfolioData.personalInfo} 
+            socialLinks={portfolioData.socialLinks}
+            experience={portfolioData.experience}
+            projects={portfolioData.projects}
+          />
           <ExperienceProjects experience={portfolioData.experience} projects={portfolioData.projects} />
           <EducationSkills education={portfolioData.education} skills={portfolioData.skills} />
           <Footer />
