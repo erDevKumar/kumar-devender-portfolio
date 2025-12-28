@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Conditional static export - disabled for admin routes
-  // output: 'export', // Commented out to enable API routes for admin
+  // Static export for Firebase Hosting
+  output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [

@@ -37,68 +37,42 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, []);
 
   useEffect(() => {
-    // Check authentication via API
-    const checkAuth = async () => {
+    // Check authentication - for static sites, use localStorage only
+    const checkAuth = () => {
       if (pathname === '/admin/login') {
         setLoading(false);
         return;
       }
 
-      try {
-        const response = await fetch('/api/auth/verify', {
-          method: 'GET',
-          credentials: 'include', // Include cookies
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.authenticated) {
-            setIsAuthenticated(true);
-            // Also set localStorage as backup
-            localStorage.setItem('admin_auth_token', 'authenticated');
-          } else {
-            setIsAuthenticated(false);
-            localStorage.removeItem('admin_auth_token');
-            router.push('/admin/login');
-          }
-        } else {
-          // Check localStorage as fallback
-          const localToken = localStorage.getItem('admin_auth_token');
-          if (localToken) {
-            setIsAuthenticated(true);
-          } else {
-            setIsAuthenticated(false);
-            router.push('/admin/login');
-          }
+      // For static export (Firebase Hosting), API routes don't work
+      // Use localStorage as the only auth method
+      const localToken = localStorage.getItem('admin_auth_token');
+      
+      if (localToken === 'authenticated') {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        // Only redirect if we're not already on login page
+        if (pathname !== '/admin/login') {
+          router.push('/admin/login');
         }
-      } catch (error) {
-        console.error('Auth check error:', error);
-        // Fallback to localStorage check
-        const localToken = localStorage.getItem('admin_auth_token');
-        if (localToken) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-          if (pathname !== '/admin/login') {
-            router.push('/admin/login');
-          }
-        }
-      } finally {
-        setLoading(false);
       }
+      
+      setLoading(false);
     };
 
     checkAuth();
   }, [pathname, router]);
 
   const handleLogout = async () => {
+    // Try to call logout API if available (won't work on static sites)
     try {
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });
     } catch (error) {
-      console.error('Logout error:', error);
+      // Ignore errors on static sites
     }
     
     localStorage.removeItem('admin_auth_token');

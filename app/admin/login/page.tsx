@@ -16,6 +16,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
+      // Try API route first (for development/localhost)
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -24,22 +25,43 @@ export default function AdminLogin() {
         body: JSON.stringify({ password }),
       });
 
-      const data = await response.json();
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Store token in localStorage
+          localStorage.setItem('admin_auth_token', 'authenticated');
+          // Redirect to admin dashboard
+          router.push('/admin');
+          router.refresh();
+          return;
+        }
+      }
 
-      if (response.ok && data.success) {
-        // Store token in localStorage as backup (cookie is primary)
+      // If API route fails (static site), check password from build-time env var
+      // Note: For static sites, password must be set at build time via NEXT_PUBLIC_ADMIN_PASSWORD
+      const staticPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+      
+      if (staticPassword && password === staticPassword) {
         localStorage.setItem('admin_auth_token', 'authenticated');
-        // Redirect to admin dashboard
         router.push('/admin');
         router.refresh();
       } else {
-        setError(data.error || 'Invalid password');
+        setError('Invalid password');
         setLoading(false);
       }
     } catch (err) {
-      console.error('Login error:', err);
-      setError('An error occurred. Please try again.');
-      setLoading(false);
+      // If API doesn't exist (static site), use build-time env var
+      const staticPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+      
+      if (staticPassword && password === staticPassword) {
+        localStorage.setItem('admin_auth_token', 'authenticated');
+        router.push('/admin');
+        router.refresh();
+      } else {
+        console.error('Login error:', err);
+        setError('Invalid password');
+        setLoading(false);
+      }
     }
   };
 
