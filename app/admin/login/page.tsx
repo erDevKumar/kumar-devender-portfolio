@@ -2,7 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, User, ArrowRight, Shield } from 'lucide-react';
+import { Lock, ArrowRight, Shield } from 'lucide-react';
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
@@ -10,24 +10,58 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // Default admin password - should be changed in production
-  const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123';
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    // Simple password check - in production, use proper authentication
-    if (password === ADMIN_PASSWORD) {
-      localStorage.setItem('admin_auth_token', 'authenticated');
-      // Use window.location for a full page reload to ensure auth state is set
-      setTimeout(() => {
-        window.location.href = '/admin';
-      }, 300);
-    } else {
-      setError('Invalid password');
-      setLoading(false);
+    try {
+      // Try API route first (for development/localhost)
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Store token in localStorage
+          localStorage.setItem('admin_auth_token', 'authenticated');
+          // Redirect to admin dashboard
+          router.push('/admin');
+          router.refresh();
+          return;
+        }
+      }
+
+      // If API route fails (static site), check password from build-time env var
+      // Note: For static sites, password must be set at build time via NEXT_PUBLIC_ADMIN_PASSWORD
+      const staticPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+      
+      if (staticPassword && password === staticPassword) {
+        localStorage.setItem('admin_auth_token', 'authenticated');
+        router.push('/admin');
+        router.refresh();
+      } else {
+        setError('Invalid password');
+        setLoading(false);
+      }
+    } catch (err) {
+      // If API doesn't exist (static site), use build-time env var
+      const staticPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+      
+      if (staticPassword && password === staticPassword) {
+        localStorage.setItem('admin_auth_token', 'authenticated');
+        router.push('/admin');
+        router.refresh();
+      } else {
+        console.error('Login error:', err);
+        setError('Invalid password');
+        setLoading(false);
+      }
     }
   };
 
@@ -97,13 +131,6 @@ export default function AdminLogin() {
               )}
             </button>
           </form>
-
-          <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-gray-300 animate-fade-in-up stagger-3">
-            <div className="bg-gray-800/30 rounded-lg p-3 sm:p-4 border border-gray-700/50">
-              <p className="font-medium text-gray-200 text-xs sm:text-sm">Default password: <code className="bg-gray-800/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-blue-400 text-xs sm:text-sm">admin123</code></p>
-              <p className="text-[10px] sm:text-xs mt-2 text-gray-300">⚠️ Change this in production!</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

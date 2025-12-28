@@ -18,9 +18,10 @@ export default function AdminDashboard() {
   });
 
   useEffect(() => {
-    // Load current portfolio data
+    // Load current portfolio data - for static sites, use default data
     const loadData = async () => {
       try {
+        // Try API route first (for development)
         const response = await fetch('/api/portfolio');
         if (response.ok) {
           const portfolioData = await response.json();
@@ -33,18 +34,10 @@ export default function AdminDashboard() {
             socialLinks: portfolioData.socialLinks?.length || 0,
           });
         } else {
-          // Fallback to default data
-          setData(portfolioData);
-          setStats({
-            experience: portfolioData.experience.length,
-            education: portfolioData.education.length,
-            skills: portfolioData.skills.length,
-            projects: portfolioData.projects.length,
-            socialLinks: portfolioData.socialLinks.length,
-          });
+          throw new Error('API not available');
         }
       } catch (error) {
-        // Fallback to default data
+        // Fallback to default data (for static sites)
         setData(portfolioData);
         setStats({
           experience: portfolioData.experience.length,

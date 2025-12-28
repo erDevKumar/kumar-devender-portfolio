@@ -37,22 +37,44 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, []);
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication - for static sites, use localStorage only
     const checkAuth = () => {
-      if (typeof window !== 'undefined') {
-        const authToken = localStorage.getItem('admin_auth_token');
-        if (authToken) {
-          setIsAuthenticated(true);
-        } else if (pathname !== '/admin/login') {
+      if (pathname === '/admin/login') {
+        setLoading(false);
+        return;
+      }
+
+      // For static export (Firebase Hosting), API routes don't work
+      // Use localStorage as the only auth method
+      const localToken = localStorage.getItem('admin_auth_token');
+      
+      if (localToken === 'authenticated') {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        // Only redirect if we're not already on login page
+        if (pathname !== '/admin/login') {
           router.push('/admin/login');
         }
       }
+      
       setLoading(false);
     };
+
     checkAuth();
   }, [pathname, router]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // Try to call logout API if available (won't work on static sites)
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      // Ignore errors on static sites
+    }
+    
     localStorage.removeItem('admin_auth_token');
     router.push('/admin/login');
   };
