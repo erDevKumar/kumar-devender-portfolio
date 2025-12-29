@@ -8,7 +8,6 @@ interface ApiResponse {
 
 export default function Loader({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -47,33 +46,73 @@ export default function Loader({ children }: { children: React.ReactNode }) {
         clearTimeout(fetchTimeout);
 
         if (!response.ok) {
-          throw new Error('Failed to fetch');
+          throw new Error(`Failed to fetch: ${response.status}`);
         }
 
+        // Get response as text (Google Docs export returns text)
         const text = await response.text();
+        console.log('Raw response text:', text);
+        
+        // Parse JSON from the response
         let data: ApiResponse = {};
-
-        // Try to parse as JSON first
-        try {
-          data = JSON.parse(text.trim());
-        } catch {
-          // If not JSON, try to extract JSON from text (handles Google Docs format)
-          const jsonMatch = text.match(/\{[\s\S]*?\}/);
-          if (jsonMatch) {
-            try {
-              data = JSON.parse(jsonMatch[0]);
-            } catch (e) {
-              // If still fails, try to extract link_v3 directly from text
-              const linkMatch = text.match(/"link_v3"\s*:\s*"([^"]+)"/);
-              if (linkMatch) {
-                data = { link_v3: linkMatch[1] };
+        
+        // First, try to extract link_v3 directly using regex (most reliable)
+        // Try multiple regex patterns to handle different formats
+        let linkMatch = text.match(/"link_v3"\s*:\s*"([^"]+)"/);
+        if (!linkMatch) {
+          // Try without quotes around the value
+          linkMatch = text.match(/"link_v3"\s*:\s*([^\s,}]+)/);
+        }
+        if (!linkMatch) {
+          // Try case-insensitive
+          linkMatch = text.match(/link_v3["\s]*:["\s]*([^\s,}"]+)/i);
+        }
+        
+        if (linkMatch && linkMatch[1]) {
+          // Clean the extracted URL (remove any trailing characters)
+          const extractedUrl = linkMatch[1].replace(/["\s]*$/, '').trim();
+          data = { link_v3: extractedUrl };
+          console.log('Extracted link_v3 via regex:', data.link_v3);
+        } else {
+          // If regex fails, try JSON parsing
+          // Clean the text: remove any leading/trailing whitespace and newlines
+          const cleanedText = text.trim().replace(/^\s*[\r\n]+/gm, '').trim();
+          
+          try {
+            // Try parsing the cleaned text directly as JSON
+            data = JSON.parse(cleanedText);
+            console.log('Parsed JSON successfully:', data);
+          } catch (parseError) {
+            // If direct parse fails, try to extract JSON object from the text
+            // Look for the first complete JSON object
+            const jsonMatch = cleanedText.match(/\{[\s\S]*?\}/);
+            if (jsonMatch) {
+              try {
+                data = JSON.parse(jsonMatch[0]);
+                console.log('Parsed JSON from extracted match:', data);
+              } catch (e) {
+                console.error('Failed to parse JSON from response:', e);
+                console.error('Attempted to parse:', jsonMatch[0]);
+                // Last resort: try to extract link_v3 with a more flexible regex
+                const flexibleLinkMatch = text.match(/link_v3["\s]*:["\s]*([^\s,}"]+)/i);
+                if (flexibleLinkMatch && flexibleLinkMatch[1]) {
+                  const extractedUrl = flexibleLinkMatch[1].replace(/["\s]*$/, '').trim();
+                  data = { link_v3: extractedUrl };
+                  console.log('Extracted link_v3 via flexible regex:', data.link_v3);
+                } else {
+                  throw new Error('Invalid JSON response and could not extract link_v3');
+                }
               }
-            }
-          } else {
-            // Try to extract link_v3 directly from text
-            const linkMatch = text.match(/"link_v3"\s*:\s*"([^"]+)"/);
-            if (linkMatch) {
-              data = { link_v3: linkMatch[1] };
+            } else {
+              // Last resort: try to extract link_v3 with a more flexible regex
+              const flexibleLinkMatch = text.match(/link_v3["\s]*:["\s]*([^\s,}"]+)/i);
+              if (flexibleLinkMatch && flexibleLinkMatch[1]) {
+                const extractedUrl = flexibleLinkMatch[1].replace(/["\s]*$/, '').trim();
+                data = { link_v3: extractedUrl };
+                console.log('Extracted link_v3 via flexible regex:', data.link_v3);
+              } else {
+                throw new Error('No JSON found in response');
+              }
             }
           }
         }
@@ -84,15 +123,20 @@ export default function Loader({ children }: { children: React.ReactNode }) {
 
         // Check if link_v3 exists and is not empty/null
         if (data.link_v3 && data.link_v3.trim() !== '') {
-          // Small delay before redirect for smooth transition
+          const redirectUrl = data.link_v3.trim();
+          console.log('Redirect URL found:', redirectUrl);
+          
+          // Redirect immediately at the loader screen
+          // Small delay (500ms) for smooth transition
           setTimeout(() => {
-            setShouldRedirect(true);
-            if (data.link_v3) {
-              window.location.href = data.link_v3;
-            }
+            window.location.replace(redirectUrl);
           }, 500);
+          
+          // Keep loading state true to show loader during redirect
+          return;
         } else {
-          // Proceed to portfolio
+          // No redirect URL found, proceed to portfolio
+          console.log('No redirect URL found, proceeding to portfolio');
           setTimeout(() => {
             setIsLoading(false);
           }, 300);
@@ -122,24 +166,6 @@ export default function Loader({ children }: { children: React.ReactNode }) {
       clearInterval(progressInterval);
     };
   }, []);
-
-  if (shouldRedirect) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#111827] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.08),transparent_70%)]"></div>
-        <div className="text-center relative z-10 animate-fade-in-up">
-          <div className="relative inline-block mb-6">
-            <div className="w-20 h-20 border-4 border-blue-500/20 rounded-full"></div>
-            <div className="absolute top-0 left-0 w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse-slow"></div>
-            </div>
-          </div>
-          <p className="text-gray-200 font-semibold text-lg animate-fade-in-down">Redirecting...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return (
