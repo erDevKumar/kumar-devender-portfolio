@@ -25,7 +25,7 @@ const DEVICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons';
 
 export const TECH_ICONS: Record<string, string> = {
   // Languages - Verified icons
-  Java: `${SIMPLE_ICONS_BASE}/java.svg`,
+  Java: `${DEVICON_BASE}/java/java-original.svg`,
   Kotlin: `${SIMPLE_ICONS_BASE}/kotlin.svg`,
   JavaScript: `${SIMPLE_ICONS_BASE}/javascript.svg`,
   TypeScript: `${SIMPLE_ICONS_BASE}/typescript.svg`,
@@ -61,7 +61,7 @@ export const TECH_ICONS: Record<string, string> = {
   'MVVM + Clean Architecture': `${SIMPLE_ICONS_BASE}/kotlin.svg`,
   MVP: `${SIMPLE_ICONS_BASE}/kotlin.svg`,
   'Clean Architecture': `${SIMPLE_ICONS_BASE}/kotlin.svg`,
-  'OOPS/SOLID Principles': `${SIMPLE_ICONS_BASE}/java.svg`,
+  'OOPS/SOLID Principles': `${DEVICON_BASE}/java/java-original.svg`,
   
   // Protocols - Using verified icons
   HTTP: `${SIMPLE_ICONS_BASE}/apache.svg`,

@@ -1,6 +1,34 @@
+'use client';
+
+import Loader from '@/components/Loader';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function NotFound() {
+  const [isRedirectPath, setIsRedirectPath] = useState(false);
+
+  useEffect(() => {
+    // Check if this is a /r/ redirect path
+    const pathname = window.location.pathname;
+    if (pathname.startsWith('/r/')) {
+      setIsRedirectPath(true);
+    }
+  }, []);
+
+  // If it's a /r/ path, use Loader to handle the redirect
+  if (isRedirectPath) {
+    return (
+      <Loader>
+        <div className="min-h-screen flex items-center justify-center bg-[#111827]">
+          <div className="text-center">
+            <p className="text-gray-400">Processing redirect...</p>
+          </div>
+        </div>
+      </Loader>
+    );
+  }
+
+  // Otherwise show the normal 404 page
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-50">
       <div className="text-center max-w-md mx-auto px-4">
