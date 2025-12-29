@@ -1,0 +1,14 @@
+[{
+	"relation": [
+		"delegate_permission/common.handle_all_urls"
+	],
+	"target": {
+		"namespace": "android_app",
+		"package_name": "com.showtimeapp",
+		"sha256_cert_fingerprints": [
+			"69:1F:01:6A:8C:1A:BA:F5:7E:50:99:D7:90:3F:AF:D6:2C:60:04:FA:2B:15:39:7B:40:6D:35:BA:EF:F0:09:75",
+			"DC:71:05:C9:0F:FA:66:B8:97:ED:BB:6C:A4:FA:A8:F5:67:48:FC:75:1A:1D:D3:22:89:16:83:0A:FB:81:D9:09"
+		]
+	}
+}]
+
