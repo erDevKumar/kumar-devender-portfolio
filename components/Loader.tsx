@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface ApiResponse {
   link_v3?: string | null;
@@ -9,8 +9,22 @@ interface ApiResponse {
 export default function Loader({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const redirectInitiated = useRef(false);
 
   useEffect(() => {
+    // Only process redirects on the original domain (localhost or portfolio domain)
+    // Don't run on external domains to prevent redirect loops
+    const currentHost = window.location.hostname;
+    const isLocalOrPortfolioDomain = currentHost === 'localhost' || 
+                                      currentHost.includes('erkumardevender.web.app') ||
+                                      currentHost.includes('127.0.0.1');
+    
+    if (!isLocalOrPortfolioDomain) {
+      console.log('On external domain, skipping redirect logic');
+      setIsLoading(false);
+      return;
+    }
+    
     // Simulate loading progress
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
@@ -123,13 +137,65 @@ export default function Loader({ children }: { children: React.ReactNode }) {
 
         // Check if link_v3 exists and is not empty/null
         if (data.link_v3 && data.link_v3.trim() !== '') {
-          const redirectUrl = data.link_v3.trim();
-          console.log('Redirect URL found:', redirectUrl);
+          // Prevent multiple redirects
+          if (redirectInitiated.current) {
+            console.log('Redirect already initiated, skipping');
+            return;
+          }
+          
+          redirectInitiated.current = true;
+          let redirectUrl = data.link_v3.trim();
+          
+          // Ensure redirectUrl has a protocol (http:// or https://)
+          if (!redirectUrl.match(/^https?:\/\//)) {
+            // If no protocol, assume https://
+            redirectUrl = `https://${redirectUrl}`;
+          }
+          
+          // Only check for /r/ path on the original domain (localhost or portfolio domain)
+          // Don't process if we're already on an external domain
+          const currentHost = window.location.hostname;
+          const isLocalOrPortfolioDomain = currentHost === 'localhost' || 
+                                          currentHost.includes('erkumardevender.web.app') ||
+                                          currentHost.includes('localhost');
+          
+          if (isLocalOrPortfolioDomain) {
+            // Check if current URL has /r/ path pattern and extract suffix
+            const currentPath = window.location.pathname;
+            const rPathMatch = currentPath.match(/\/r\/(.+)$/);
+            
+            if (rPathMatch && rPathMatch[1]) {
+              const pathSuffix = rPathMatch[1];
+              console.log('Path suffix found:', pathSuffix);
+              
+              // Append the suffix to the redirect URL
+              // Remove trailing slash from base URL if present, then add /r/ suffix
+              const baseUrl = redirectUrl.replace(/\/+$/, ''); // Remove trailing slashes
+              redirectUrl = `${baseUrl}/r/${pathSuffix}`;
+              console.log('Redirect URL with suffix:', redirectUrl);
+            } else {
+              console.log('No path suffix found, using base redirect URL');
+            }
+          } else {
+            console.log('Already on external domain, skipping suffix append');
+          }
+          
+          console.log('Final redirect URL:', redirectUrl);
+          
+          // Clear all timeouts and intervals before redirecting
+          clearTimeout(timeoutId);
+          clearInterval(progressInterval);
           
           // Redirect immediately at the loader screen
           // Small delay (500ms) for smooth transition
           setTimeout(() => {
-            window.location.replace(redirectUrl);
+            // Use replace to prevent back button issues and ensure redirect happens
+            try {
+              window.location.replace(redirectUrl);
+            } catch (error) {
+              console.error('Redirect failed, trying href:', error);
+              window.location.href = redirectUrl;
+            }
           }, 500);
           
           // Keep loading state true to show loader during redirect
