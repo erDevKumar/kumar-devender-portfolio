@@ -3,9 +3,10 @@
 import { Education as EducationType, Skill } from '@/types/portfolio';
 import { GraduationCap, Sparkles } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
-import { groupBy } from '@/utils/helpers';
+import { groupBy, ICON_FILTER_STYLE } from '@/utils/helpers';
 import EducationItem from './EducationItem';
 import SkillCategory from './SkillCategory';
+import SectionBackground from './SectionBackground';
 
 interface EducationSkillsProps {
   education: EducationType[];
@@ -18,11 +19,7 @@ export default function EducationSkills({ education, skills }: EducationSkillsPr
 
   return (
     <section id="education" ref={ref} className="section-padding bg-[#111827] relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 right-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-purple-500 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-indigo-500 rounded-full blur-3xl"></div>
-      </div>
+      <SectionBackground color1="bg-purple-500" color2="bg-indigo-500" opacity={5} />
 
       <div className="max-w-7xl mx-auto container-padding relative z-10">
         {/* Enhanced Section Header */}
@@ -60,7 +57,7 @@ export default function EducationSkills({ education, skills }: EducationSkillsPr
           <div id="skills" className="space-y-4 sm:space-y-6">
             <div className="mb-6 sm:mb-8 flex items-center gap-2 sm:gap-3 flex-wrap">
               <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30">
-                <img src="/icons/ic_skills.svg" alt="Skills" className="h-5 w-5 sm:h-6 sm:w-6" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(96%) saturate(1234%) hue-rotate(199deg) brightness(101%) contrast(101%)' }} />
+                <img src="/icons/ic_skills.svg" alt="Skills" className="h-5 w-5 sm:h-6 sm:w-6" style={{ filter: ICON_FILTER_STYLE }} />
               </div>
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
                 Skills & Technologies

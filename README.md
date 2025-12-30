@@ -65,25 +65,40 @@ Update metadata in `app/layout.tsx`:
 ## Project Structure
 
 ```
-├── app/
+├── app/                    # Next.js App Router
 │   ├── layout.tsx          # Root layout with metadata
 │   ├── page.tsx            # Home page with all sections
-│   └── globals.css         # Global styles
-├── components/
+│   ├── globals.css         # Global styles
+│   ├── error.tsx           # Error boundary
+│   ├── global-error.tsx    # Global error handler
+│   └── not-found.tsx       # 404 page with redirect support
+├── components/             # React components (flat structure)
 │   ├── Hero.tsx            # Hero/Introduction section
-│   ├── About.tsx           # About me section
-│   ├── Experience.tsx      # Work experience timeline
-│   ├── Education.tsx       # Education section
-│   ├── Skills.tsx          # Skills & technologies
-│   ├── Projects.tsx        # Projects portfolio
-│   ├── Contact.tsx         # Contact form/section
+│   ├── Navigation.tsx      # Navigation header with resume download
+│   ├── Footer.tsx          # Footer component
+│   ├── Loader.tsx          # Loading/redirect handler
+│   ├── ScrollProgress.tsx  # Scroll progress indicator
 │   ├── SocialLinks.tsx     # Social media links
-│   └── Navigation.tsx      # Navigation header
-├── data/
+│   ├── ExperienceProjects.tsx  # Combined experience & projects section
+│   ├── ExperienceItem.tsx  # Individual experience item
+│   ├── EducationSkills.tsx # Combined education & skills section
+│   ├── EducationItem.tsx   # Individual education item
+│   ├── SkillCategory.tsx   # Skills grouped by category
+│   ├── ProjectItem.tsx     # Individual project item
+│   └── CompanyLogo.tsx     # Company logo component
+├── hooks/                  # Custom React hooks
+│   ├── useExpandable.ts    # Expandable/collapsible state
+│   ├── useScrollAnimation.ts # Scroll-based animations
+│   └── useItemScrollAnimation.ts # Item-specific scroll animations
+├── utils/                  # Utility functions
+│   ├── constants.ts         # App constants (nav items, icons, etc.)
+│   ├── helpers.ts          # Helper functions (icon mapping, grouping)
+│   └── generateResumePDF.ts # PDF resume generation
+├── data/                   # Data files
 │   └── portfolio.ts        # Portfolio data structure
-├── types/
-│   └── portfolio.ts        # TypeScript type definitions
-└── public/                 # Static assets
+├── types/                  # TypeScript definitions
+│   └── portfolio.ts        # Portfolio type definitions
+└── public/                 # Static assets (images, icons, logos)
 ```
 
 ## Deployment

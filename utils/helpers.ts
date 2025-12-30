@@ -149,3 +149,21 @@ export const groupBy = <T>(array: T[], key: keyof T): Record<string, T[]> => {
     return acc;
   }, {} as Record<string, T[]>);
 };
+
+export const getCompanyFromProject = (projectName: string, companies: string[]): string | null => {
+  for (const company of companies) {
+    if (projectName.toLowerCase().includes(company.toLowerCase())) {
+      return company;
+    }
+  }
+  return null;
+};
+
+export const getProjectsForCompany = (company: string, projects: any[], allCompanies: string[]): any[] => {
+  return projects.filter(project => {
+    const projectCompany = getCompanyFromProject(project.name, allCompanies);
+    return projectCompany === company;
+  });
+};
+
+export const ICON_FILTER_STYLE = 'brightness(0) saturate(100%) invert(67%) sepia(96%) saturate(1234%) hue-rotate(199deg) brightness(101%) contrast(101%)';

@@ -2,7 +2,9 @@
 
 import { PersonalInfo, WorkExperience, Project } from '@/types/portfolio';
 import SocialLinks from '@/components/SocialLinks';
+import StatCard from '@/components/StatCard';
 import { ChevronDown } from 'lucide-react';
+import { calculateStats } from '@/utils/stats';
 
 interface HeroProps {
   personalInfo: PersonalInfo;
@@ -18,20 +20,7 @@ export default function Hero({ personalInfo, socialLinks, experience = [], proje
   const lastName = nameParts.slice(1).join(' ') || '';
 
   // Calculate statistics
-  const yearsExperience = experience.length > 0 
-    ? experience.reduce((acc, exp) => acc + 2, 0) // Approximate 2 years per experience
-    : 10.5; // Fallback
-  const topCompanies = experience.length > 0 
-    ? new Set(experience.map(exp => exp.company)).size 
-    : 6;
-  const projectsDelivered = projects.length || 15;
-  const leadershipYears = experience.length > 0
-    ? experience.filter(exp => 
-        exp.role.toLowerCase().includes('lead') || 
-        exp.role.toLowerCase().includes('senior') ||
-        exp.role.toLowerCase().includes('manager')
-      ).length * 2
-    : 4;
+  const stats = calculateStats(experience, projects);
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center pt-16 sm:pt-20 bg-[#111827] relative overflow-hidden">
@@ -98,38 +87,10 @@ export default function Hero({ personalInfo, socialLinks, experience = [], proje
             {/* Statistics Section - Below Image */}
             <div className="w-full lg:w-auto mt-2">
               <div className="grid grid-cols-2 gap-2 sm:gap-3 max-w-xs mx-auto lg:mx-0 lg:max-w-none">
-                <div className="text-center px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
-                  <div className="text-base sm:text-lg md:text-xl font-bold text-blue-400 mb-0.5">
-                    {yearsExperience}+
-                  </div>
-                  <div className="text-[9px] sm:text-[10px] md:text-xs text-gray-300 font-medium leading-tight">
-                    Years Experience
-                  </div>
-                </div>
-                <div className="text-center px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
-                  <div className="text-base sm:text-lg md:text-xl font-bold text-indigo-400 mb-0.5">
-                    {topCompanies}
-                  </div>
-                  <div className="text-[9px] sm:text-[10px] md:text-xs text-gray-300 font-medium leading-tight">
-                    Top Companies
-                  </div>
-                </div>
-                <div className="text-center px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
-                  <div className="text-base sm:text-lg md:text-xl font-bold text-green-400 mb-0.5">
-                    {projectsDelivered}+
-                  </div>
-                  <div className="text-[9px] sm:text-[10px] md:text-xs text-gray-300 font-medium leading-tight">
-                    Projects Delivered
-                  </div>
-                </div>
-                <div className="text-center px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg bg-gray-800/40 backdrop-blur-sm border border-gray-700/50">
-                  <div className="text-base sm:text-lg md:text-xl font-bold text-purple-400 mb-0.5">
-                    {leadershipYears}
-                  </div>
-                  <div className="text-[9px] sm:text-[10px] md:text-xs text-gray-300 font-medium leading-tight">
-                    Years Leadership
-                  </div>
-                </div>
+                <StatCard value={`${stats.yearsExperience}+`} label="Years Experience" color="blue" />
+                <StatCard value={stats.topCompanies} label="Top Companies" color="indigo" />
+                <StatCard value={`${stats.projectsDelivered}+`} label="Projects Delivered" color="green" />
+                <StatCard value={stats.leadershipYears} label="Years Leadership" color="purple" />
               </div>
             </div>
 

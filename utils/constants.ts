@@ -12,12 +12,9 @@ export const CATEGORY_LABELS: Record<string, string> = {
   tool: 'Tools & Technologies',
 };
 
-export const PROFICIENCY_COLORS: Record<string, string> = {
-  beginner: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
-  intermediate: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
-  advanced: 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30',
-  expert: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
-};
+export const SECTION_PADDING = 'section-padding';
+export const CONTAINER_PADDING = 'container-padding';
+
 
 // Using reliable CDN sources
 const SIMPLE_ICONS_BASE = 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons';

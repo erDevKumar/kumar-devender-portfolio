@@ -1,65 +1,47 @@
 'use client';
 
 import { Project } from '@/types/portfolio';
-import { Code, Building2 } from 'lucide-react';
-import { useItemScrollAnimation } from '@/hooks/useItemScrollAnimation';
+import ScrollAnimated from './ScrollAnimated';
+import { ICON_FILTER_STYLE } from '@/utils/helpers';
 
 interface ProjectItemProps {
   project: Project;
   index: number;
-  isHighlighted?: boolean;
-  relatedCompany?: string | null;
   onClick?: () => void;
 }
 
-export default function ProjectItem({ project, index, isHighlighted = false, relatedCompany, onClick }: ProjectItemProps) {
-  const { ref, isVisible } = useItemScrollAnimation(index, 0);
-
+export default function ProjectItem({ project, index, onClick }: ProjectItemProps) {
   return (
-    <div 
-      ref={ref} 
-      className={`scroll-fade-in ${isVisible ? 'visible' : ''}`}
-      onClick={onClick}
-    >
-      <div className={`glass-card rounded-3xl p-6 md:p-8 hover:shadow-soft-lg transition-all duration-500 border shadow-soft-lg card-hover cursor-pointer ${
-        isHighlighted 
-          ? 'border-emerald-400 ring-4 ring-emerald-400/50 shadow-2xl scale-[1.02] bg-emerald-50/30' 
-          : 'border-emerald-200/40'
-      }`}>
-        {/* Project Header */}
-        <div className="flex items-center gap-4 mb-4">
-          <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-3 rounded-2xl shadow-xl flex-shrink-0">
-            <Code className="h-5 w-5 md:h-6 md:w-6 text-white" />
+    <ScrollAnimated index={index}>
+      <div className="group rounded-xl p-4 sm:p-6 bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/10">
+        <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+          <div className="p-1.5 sm:p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30 group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
+            <img src="/icons/ic_projects.svg" alt="Projects" className="h-4 w-4 sm:h-5 sm:w-5" style={{ filter: ICON_FILTER_STYLE }} />
           </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{project.name}</h4>
-            {relatedCompany && (
-              <div className="flex items-center gap-2 text-xs md:text-sm">
-                <Building2 className="h-3.5 w-3.5 text-emerald-600" />
-                <span className="text-emerald-700 font-semibold">{relatedCompany}</span>
-              </div>
-            )}
-          </div>
+          <h4 className="text-base sm:text-lg font-bold text-white group-hover:text-blue-400 transition-colors break-words">
+            {project.name}
+          </h4>
         </div>
-
-        {/* Project Description - Always Visible */}
-        <p className="text-sm md:text-base text-gray-700/90 mb-6 leading-relaxed">
+        <p className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
           {project.description}
         </p>
-
-        {/* Technologies - Always Visible */}
-        <div className="flex flex-wrap gap-2.5">
-          {project.technologies.map((tech, idx) => (
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+          {project.technologies.slice(0, 5).map((tech, techIdx) => (
             <span 
-              key={idx} 
-              className="bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 font-semibold text-xs md:text-sm px-4 py-2 rounded-full border border-emerald-200/50 shadow-soft hover:shadow-md hover:scale-105 transition-all duration-300 focus-visible-ring"
+              key={techIdx} 
+              className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20"
             >
               {tech}
             </span>
           ))}
+          {project.technologies.length > 5 && (
+            <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium bg-gray-700/50 text-gray-400 border border-gray-600/50">
+              +{project.technologies.length - 5}
+            </span>
+          )}
         </div>
       </div>
-    </div>
+    </ScrollAnimated>
   );
 }
 

@@ -3,8 +3,11 @@
 import { WorkExperience, Project } from '@/types/portfolio';
 import { Calendar, MapPin, Briefcase, ExternalLink, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import CompanyLogo from '@/components/CompanyLogo';
+import ScrollAnimated from '@/components/ScrollAnimated';
+import MetaBadge from '@/components/MetaBadge';
 import { useExpandable } from '@/hooks/useExpandable';
-import { useItemScrollAnimation } from '@/hooks/useItemScrollAnimation';
+import { ICON_FILTER_STYLE } from '@/utils/helpers';
+import ProjectItem from './ProjectItem';
 
 interface ExperienceItemProps {
   exp: WorkExperience;
@@ -14,11 +17,10 @@ interface ExperienceItemProps {
 
 export default function ExperienceItem({ exp, index, relatedProjects = [] }: ExperienceItemProps) {
   const { isExpanded, toggle } = useExpandable<number>();
-  const { ref, isVisible } = useItemScrollAnimation(index, 0);
   const expanded = isExpanded(index);
 
   return (
-    <div ref={ref} className={`scroll-fade-in ${isVisible ? 'visible' : ''}`}>
+    <ScrollAnimated index={index}>
       <div 
         className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-blue-500/10"
         onClick={() => toggle(index)}
@@ -78,7 +80,7 @@ export default function ExperienceItem({ exp, index, relatedProjects = [] }: Exp
                 <div className="flex items-center gap-2 flex-shrink-0">
                   {relatedProjects.length > 0 && (
                     <div className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border border-blue-500/30 flex items-center gap-1 sm:gap-1.5">
-                      <img src="/icons/ic_projects.svg" alt="Projects" className="h-3 w-3 sm:h-3.5 sm:w-3.5" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(96%) saturate(1234%) hue-rotate(199deg) brightness(101%) contrast(101%)' }} />
+                      <img src="/icons/ic_projects.svg" alt="Projects" className="h-3 w-3 sm:h-3.5 sm:w-3.5" style={{ filter: ICON_FILTER_STYLE }} />
                       <span>{relatedProjects.length}</span>
                     </div>
                   )}
@@ -98,18 +100,9 @@ export default function ExperienceItem({ exp, index, relatedProjects = [] }: Exp
                 </div>
               </div>
 
-              {/* Meta Information */}
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm">
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-700/50 border border-gray-600/50">
-                  <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400 flex-shrink-0" />
-                  <span className="text-gray-200 font-medium whitespace-nowrap">{exp.duration}</span>
-                </div>
-                {exp.location && (
-                  <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gray-700/50 border border-gray-600/50">
-                    <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-purple-400 flex-shrink-0" />
-                    <span className="text-gray-200 font-medium break-words">{exp.location}</span>
-                  </div>
-                )}
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+                <MetaBadge icon={Calendar} text={exp.duration} iconColor="text-blue-400" />
+                {exp.location && <MetaBadge icon={MapPin} text={exp.location} iconColor="text-purple-400" />}
               </div>
             </div>
           </div>
@@ -142,7 +135,7 @@ export default function ExperienceItem({ exp, index, relatedProjects = [] }: Exp
                 {relatedProjects.length > 0 && (
                   <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-700/50">
                     <div className="flex items-center gap-2 mb-3 sm:mb-4 flex-wrap">
-                      <img src="/icons/ic_projects.svg" alt="Projects" className="h-4 w-4 sm:h-5 sm:w-5" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(96%) saturate(1234%) hue-rotate(199deg) brightness(101%) contrast(101%)' }} />
+                      <img src="/icons/ic_projects.svg" alt="Projects" className="h-4 w-4 sm:h-5 sm:w-5" style={{ filter: ICON_FILTER_STYLE }} />
                       <h5 className="text-base sm:text-lg font-bold text-white">Related Projects</h5>
                       <span className="px-2 py-0.5 rounded text-xs font-semibold bg-blue-500/20 text-blue-400 border border-blue-500/30">
                         {relatedProjects.length}
@@ -150,39 +143,8 @@ export default function ExperienceItem({ exp, index, relatedProjects = [] }: Exp
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       {relatedProjects.map((project, projIdx) => (
-                        <div 
-                          key={`proj-${index}-${projIdx}`}
-                          className="group/project rounded-xl p-4 sm:p-5 bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/10"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
-                            <div className="p-1.5 sm:p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/30 group-hover/project:scale-110 transition-transform duration-200 flex-shrink-0">
-                              <img src="/icons/ic_projects.svg" alt="Projects" className="h-3.5 w-3.5 sm:h-4 sm:w-4" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(96%) saturate(1234%) hue-rotate(199deg) brightness(101%) contrast(101%)' }} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h6 className="text-sm sm:text-base font-bold text-white group-hover/project:text-blue-400 transition-colors mb-1 break-words">
-                                {project.name}
-                              </h6>
-                            </div>
-                          </div>
-                          <p className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
-                            {project.description}
-                          </p>
-                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            {project.technologies.slice(0, 4).map((tech, techIdx) => (
-                              <span 
-                                key={techIdx} 
-                                className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                              >
-                                {tech}
-                              </span>
-                            ))}
-                            {project.technologies.length > 4 && (
-                              <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-medium bg-gray-700/50 text-gray-400 border border-gray-600/50">
-                                +{project.technologies.length - 4} more
-                              </span>
-                            )}
-                          </div>
+                        <div key={`proj-${index}-${projIdx}`} onClick={(e) => e.stopPropagation()}>
+                          <ProjectItem project={project} index={projIdx} />
                         </div>
                       ))}
                     </div>
@@ -193,6 +155,6 @@ export default function ExperienceItem({ exp, index, relatedProjects = [] }: Exp
           </div>
         </div>
       </div>
-    </div>
+    </ScrollAnimated>
   );
 }

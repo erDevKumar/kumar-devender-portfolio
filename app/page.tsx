@@ -1,6 +1,5 @@
 'use client';
 
-import { useAdmin } from '@/contexts/AdminContext';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
@@ -8,18 +7,9 @@ import ExperienceProjects from '@/components/ExperienceProjects';
 import EducationSkills from '@/components/EducationSkills';
 import Loader from '@/components/Loader';
 import ScrollProgress from '@/components/ScrollProgress';
-import AdminPanel from '@/components/AdminPanel';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Home() {
-  const { isAuthenticated, isAdminOpen } = useAdmin();
-
-  // If admin is authenticated and open, show only admin panel
-  if (isAuthenticated && isAdminOpen) {
-    return <AdminPanel />;
-  }
-
-  // Otherwise show portfolio
   return (
     <Loader>
       <ScrollProgress />

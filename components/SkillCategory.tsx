@@ -3,9 +3,9 @@
 import { Skill } from '@/types/portfolio';
 import { Code, Users, Globe, Wrench, LucideIcon, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import { useExpandable } from '@/hooks/useExpandable';
+import ScrollAnimated from './ScrollAnimated';
 import { CATEGORY_LABELS } from '@/utils/constants';
 import { getTechIcon } from '@/utils/helpers';
-import { useItemScrollAnimation } from '@/hooks/useItemScrollAnimation';
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   technical: Code,
@@ -50,12 +50,11 @@ interface SkillCategoryProps {
 export default function SkillCategory({ category, skills, index }: SkillCategoryProps) {
   const { isExpanded, toggle } = useExpandable<string>();
   const Icon = CATEGORY_ICONS[category] || Code;
-  const { ref, isVisible } = useItemScrollAnimation(index, 0);
   const expanded = isExpanded(category);
   const colors = CATEGORY_COLORS[category] || CATEGORY_COLORS.technical;
 
   return (
-    <div ref={ref} className={`scroll-fade-in ${isVisible ? 'visible' : ''}`}>
+    <ScrollAnimated index={index}>
       <div 
         className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800/60 via-gray-800/40 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-blue-500/10"
         onClick={() => toggle(category)}
@@ -148,6 +147,6 @@ export default function SkillCategory({ category, skills, index }: SkillCategory
           </div>
         </div>
       </div>
-    </div>
+    </ScrollAnimated>
   );
 }

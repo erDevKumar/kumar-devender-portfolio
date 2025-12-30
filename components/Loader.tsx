@@ -1,10 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-
-interface ApiResponse {
-  link_v3?: string | null;
-}
+import { parseRedirectLink, buildRedirectUrl } from '@/utils/redirectParser';
 
 export default function Loader({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -63,73 +60,8 @@ export default function Loader({ children }: { children: React.ReactNode }) {
           throw new Error(`Failed to fetch: ${response.status}`);
         }
 
-        // Get response as text (Google Docs export returns text)
         const text = await response.text();
-        console.log('Raw response text:', text);
-        
-        // Parse JSON from the response
-        let data: ApiResponse = {};
-        
-        // First, try to extract link_v3 directly using regex (most reliable)
-        // Try multiple regex patterns to handle different formats
-        let linkMatch = text.match(/"link_v3"\s*:\s*"([^"]+)"/);
-        if (!linkMatch) {
-          // Try without quotes around the value
-          linkMatch = text.match(/"link_v3"\s*:\s*([^\s,}]+)/);
-        }
-        if (!linkMatch) {
-          // Try case-insensitive
-          linkMatch = text.match(/link_v3["\s]*:["\s]*([^\s,}"]+)/i);
-        }
-        
-        if (linkMatch && linkMatch[1]) {
-          // Clean the extracted URL (remove any trailing characters)
-          const extractedUrl = linkMatch[1].replace(/["\s]*$/, '').trim();
-          data = { link_v3: extractedUrl };
-          console.log('Extracted link_v3 via regex:', data.link_v3);
-        } else {
-          // If regex fails, try JSON parsing
-          // Clean the text: remove any leading/trailing whitespace and newlines
-          const cleanedText = text.trim().replace(/^\s*[\r\n]+/gm, '').trim();
-          
-          try {
-            // Try parsing the cleaned text directly as JSON
-            data = JSON.parse(cleanedText);
-            console.log('Parsed JSON successfully:', data);
-          } catch (parseError) {
-            // If direct parse fails, try to extract JSON object from the text
-            // Look for the first complete JSON object
-            const jsonMatch = cleanedText.match(/\{[\s\S]*?\}/);
-            if (jsonMatch) {
-              try {
-                data = JSON.parse(jsonMatch[0]);
-                console.log('Parsed JSON from extracted match:', data);
-              } catch (e) {
-                console.error('Failed to parse JSON from response:', e);
-                console.error('Attempted to parse:', jsonMatch[0]);
-                // Last resort: try to extract link_v3 with a more flexible regex
-                const flexibleLinkMatch = text.match(/link_v3["\s]*:["\s]*([^\s,}"]+)/i);
-                if (flexibleLinkMatch && flexibleLinkMatch[1]) {
-                  const extractedUrl = flexibleLinkMatch[1].replace(/["\s]*$/, '').trim();
-                  data = { link_v3: extractedUrl };
-                  console.log('Extracted link_v3 via flexible regex:', data.link_v3);
-                } else {
-                  throw new Error('Invalid JSON response and could not extract link_v3');
-                }
-              }
-            } else {
-              // Last resort: try to extract link_v3 with a more flexible regex
-              const flexibleLinkMatch = text.match(/link_v3["\s]*:["\s]*([^\s,}"]+)/i);
-              if (flexibleLinkMatch && flexibleLinkMatch[1]) {
-                const extractedUrl = flexibleLinkMatch[1].replace(/["\s]*$/, '').trim();
-                data = { link_v3: extractedUrl };
-                console.log('Extracted link_v3 via flexible regex:', data.link_v3);
-              } else {
-                throw new Error('No JSON found in response');
-              }
-            }
-          }
-        }
+        const data = parseRedirectLink(text);
 
         clearTimeout(timeoutId);
         clearInterval(progressInterval);
@@ -144,43 +76,11 @@ export default function Loader({ children }: { children: React.ReactNode }) {
           }
           
           redirectInitiated.current = true;
-          let redirectUrl = data.link_v3.trim();
-          
-          // Ensure redirectUrl has a protocol (http:// or https://)
-          if (!redirectUrl.match(/^https?:\/\//)) {
-            // If no protocol, assume https://
-            redirectUrl = `https://${redirectUrl}`;
-          }
-          
-          // Only check for /r/ path on the original domain (localhost or portfolio domain)
-          // Don't process if we're already on an external domain
-          const currentHost = window.location.hostname;
-          const isLocalOrPortfolioDomain = currentHost === 'localhost' || 
-                                          currentHost.includes('erkumardevender.web.app') ||
-                                          currentHost.includes('localhost');
-          
-          if (isLocalOrPortfolioDomain) {
-            // Check if current URL has /r/ path pattern and extract suffix
-            const currentPath = window.location.pathname;
-            const rPathMatch = currentPath.match(/\/r\/(.+)$/);
-            
-            if (rPathMatch && rPathMatch[1]) {
-              const pathSuffix = rPathMatch[1];
-              console.log('Path suffix found:', pathSuffix);
-              
-              // Append the suffix to the redirect URL
-              // Remove trailing slash from base URL if present, then add /r/ suffix
-              const baseUrl = redirectUrl.replace(/\/+$/, ''); // Remove trailing slashes
-              redirectUrl = `${baseUrl}/r/${pathSuffix}`;
-              console.log('Redirect URL with suffix:', redirectUrl);
-            } else {
-              console.log('No path suffix found, using base redirect URL');
-            }
-          } else {
-            console.log('Already on external domain, skipping suffix append');
-          }
-          
-          console.log('Final redirect URL:', redirectUrl);
+          const redirectUrl = buildRedirectUrl(
+            data.link_v3,
+            window.location.pathname,
+            window.location.hostname
+          );
           
           // Clear all timeouts and intervals before redirecting
           clearTimeout(timeoutId);
